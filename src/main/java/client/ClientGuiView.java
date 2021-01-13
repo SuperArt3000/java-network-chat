@@ -19,9 +19,6 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Данный класс отвечает за отображение данных пользователю.
- * Все, что видит пользователь, генерируется видом.
- *
  * @author Zurbaevi Nika
  */
 public class ClientGuiView extends JFrame {
@@ -49,14 +46,7 @@ public class ClientGuiView extends JFrame {
     private javax.swing.JTextField textFieldUserInputMessage;
 
     private boolean radioButtonCheckPrivateOrNot;
-    private JMenuItem menuItemChangeUsername;
-    private JMenu menuOthers;
 
-    /**
-     * Конструктор c определенными значениями
-     *
-     * @param clientGuiController клиент
-     */
     public ClientGuiView(ClientGuiController clientGuiController) {
         this.client = clientGuiController;
 
@@ -72,285 +62,7 @@ public class ClientGuiView extends JFrame {
         }
     }
 
-    /**
-     * Метод инициализирующий графический интерфейс клиентского приложения
-     */
     protected void initComponents() {
-//        buttonGroup = new ButtonGroup();
-//        radioButtonSendMessageToAll = new JRadioButton();
-//        radioButtonSendPrivateMessageToSelectedUser = new JRadioButton();
-//        buttonClearChatLog = new JButton();
-//        buttonChangeInputColor = new JButton();
-//        buttonSoundOptions = new JButton();
-//        buttonChatLog = new JButton();
-//        buttonMoveToSystemTray = new JButton();
-//        buttonSend = new JButton();
-//        textFieldUserInputMessage = new JTextField();
-//        scrollPanelForUserListOnline = new JScrollPane();
-//        listUserOnline = new JList<>();
-//        buttonConnectToServer = new JButton();
-//        scrollPanelForChatLog = new JScrollPane();
-//        textAreaChatLog = new JTextArea();
-//        buttonDisconnectToServer = new JButton();
-//        menuBar = new JMenuBar();
-//        menuDatabase = new JMenu();
-//        menuItemLogin = new JMenuItem();
-//        menuItemRegistration = new JMenuItem();
-//        menuItemChangeUsername = new javax.swing.JMenuItem();
-//        menuOthers = new javax.swing.JMenu();
-//
-//        setTitle("Network chat");
-//
-//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        setMinimumSize(new Dimension(758, 400));
-//        setPreferredSize(new Dimension(758, 400));
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                if (client.isClientConnected()) {
-//                    client.disableClient();
-//                }
-//                System.exit(0);
-//            }
-//        });
-//
-//        buttonGroup.add(radioButtonSendMessageToAll);
-//        radioButtonSendMessageToAll.setSelected(true);
-//        radioButtonSendMessageToAll.setText("Send message to all");
-//        radioButtonSendMessageToAll.addActionListener(e -> radioButtonCheckPrivateOrNot = false);
-//
-//        buttonGroup.add(radioButtonSendPrivateMessageToSelectedUser);
-//        radioButtonSendPrivateMessageToSelectedUser.setText("Send private message to selected user ");
-//        radioButtonSendPrivateMessageToSelectedUser.addActionListener(e -> radioButtonCheckPrivateOrNot = true);
-//
-//        try {
-//            setIconImage(ImageIO.read(new File("default.png")));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonClearChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/clear-chat.png")))); // NOI18N
-//        buttonClearChatLog.setToolTipText("Clear chat");
-//        buttonClearChatLog.setMaximumSize(new Dimension(50, 25));
-//        buttonClearChatLog.setMinimumSize(new Dimension(50, 25));
-//        buttonClearChatLog.setPreferredSize(new Dimension(50, 25));
-//        buttonClearChatLog.addActionListener(e -> {
-//            if (!textAreaChatLog.getText().equals("")) {
-//                textAreaChatLog.setText("");
-//            }
-//        });
-//
-//        buttonChangeInputColor.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/color-wheel.png")))); // NOI18N
-//        buttonChangeInputColor.setToolTipText("Change input color");
-//        buttonChangeInputColor.addActionListener(e -> {
-//            Color color = JColorChooser.showDialog(null, "Choose a Color", textAreaChatLog.getForeground());
-//            if (color != null) {
-//                textAreaChatLog.setForeground(color);
-//            }
-//        });
-//        buttonChangeInputColor.setMaximumSize(new Dimension(50, 25));
-//        buttonChangeInputColor.setMinimumSize(new Dimension(50, 25));
-//        buttonChangeInputColor.setPreferredSize(new Dimension(50, 25));
-//
-//        buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/volume-on.png")))); // NOI18N
-//        buttonSoundOptions.setToolTipText("Sound options");
-//        buttonSoundOptions.setMaximumSize(new Dimension(50, 25));
-//        buttonSoundOptions.setMinimumSize(new Dimension(50, 25));
-//        buttonSoundOptions.setPreferredSize(new Dimension(50, 25));
-//        buttonSoundOptions.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (!MakeSound.isIncluded()) {
-//                    MakeSound.off();
-//                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/volume-off.png")))); // NOI18N
-//                } else {
-//                    MakeSound.on();
-//                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/volume-on.png")))); //
-//                }
-//            }
-//        });
-//
-//        buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/notes.png")))); // NOI18N
-//        buttonChatLog.setToolTipText("Save chat log");
-//        buttonChatLog.setMaximumSize(new Dimension(50, 25));
-//        buttonChatLog.setMinimumSize(new Dimension(50, 25));
-//        buttonChatLog.setPreferredSize(new Dimension(50, 25));
-//        buttonChatLog.addActionListener(e -> saveToFile());
-//
-//        buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/moving-truck.png")))); // NOI18N
-//        buttonMoveToSystemTray.setToolTipText("Move to system tray");
-//        buttonMoveToSystemTray.setMaximumSize(new Dimension(50, 25));
-//        buttonMoveToSystemTray.setMinimumSize(new Dimension(50, 25));
-//        buttonMoveToSystemTray.setPreferredSize(new Dimension(50, 25));
-//        buttonMoveToSystemTray.addActionListener(e -> {
-//            try {
-//                moveToSystemTray();
-//            } catch (IOException | AWTException ioException) {
-//                ioException.printStackTrace();
-//            }
-//        });
-//
-//        buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/send (3).png")))); // NOI18N
-//        buttonSend.setToolTipText("Send message");
-//        buttonSend.setText("Send");
-//        buttonSend.setMaximumSize(new Dimension(85, 25));
-//        buttonSend.setMinimumSize(new Dimension(85, 25));
-//        buttonSend.setPreferredSize(new Dimension(85, 25));
-//        buttonSend.addActionListener(e -> {
-//            if (!textFieldUserInputMessage.getText().equals("")) {
-//                if (radioButtonCheckPrivateOrNot) {
-//                    if (listUserOnline.isSelectedIndex(listUserOnline.getSelectedIndex())) {
-//                        client.sendPrivateMessageOnServer(new String[]{listUserOnline.getSelectedValue(), textFieldUserInputMessage.getText()});
-//                    } else {
-//                        errorDialogWindow("Select a user in the list");
-//                    }
-//                } else {
-//                    client.sendMessageOnServer(textFieldUserInputMessage.getText());
-//                }
-//                textFieldUserInputMessage.setText("");
-//            }
-//        });
-//
-//        textFieldUserInputMessage.setToolTipText("Input message");
-//        textFieldUserInputMessage.addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                if (!textFieldUserInputMessage.getText().equals("") && e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                    if (radioButtonCheckPrivateOrNot) {
-//                        if (listUserOnline.isSelectedIndex(listUserOnline.getSelectedIndex())) {
-//                            client.sendPrivateMessageOnServer(new String[]{listUserOnline.getSelectedValue(), textFieldUserInputMessage.getText()});
-//                        } else {
-//                            errorDialogWindow("Select a user in the list");
-//                        }
-//                    } else {
-//                        client.sendMessageOnServer(textFieldUserInputMessage.getText());
-//                    }
-//                    textFieldUserInputMessage.setText("");
-//                }
-//            }
-//        });
-//
-//        listUserOnline.setToolTipText("User list online");
-//        listUserOnline.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        scrollPanelForUserListOnline.setViewportView(listUserOnline);
-//
-//        buttonConnectToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/connection.png")))); // NOI18N
-//        buttonConnectToServer.setText("Connect to server");
-//        buttonConnectToServer.addActionListener(e -> {
-//            if (client.isDatabaseConnected()) {
-//                client.connectToServer();
-//            } else {
-//                errorDialogWindow("Not connected database");
-//            }
-//        });
-//        buttonConnectToServer.setToolTipText("Connect to server");
-//
-//        textAreaChatLog.setEditable(false);
-//        textAreaChatLog.setColumns(20);
-//        textAreaChatLog.setRows(5);
-//        textAreaChatLog.setFont(new Font("Tahoma", Font.PLAIN, 14));
-//        textAreaChatLog.setToolTipText("Chat log");
-//        scrollPanelForChatLog.setViewportView(textAreaChatLog);
-//
-//        buttonDisconnectToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/disconnected.png")))); // NOI18N
-//        buttonDisconnectToServer.setText("Disconnect to server");
-//        buttonDisconnectToServer.addActionListener(e -> client.disableClient());
-//
-//        menuDatabase.setText("Database");
-//
-//        menuItemLogin.setText("Login");
-//        menuItemLogin.addActionListener(e -> userLogin());
-//        menuDatabase.add(menuItemLogin);
-//
-//        menuItemRegistration.setText("Registration");
-//        menuItemRegistration.addActionListener(e -> userRegistration());
-//        menuDatabase.add(menuItemRegistration);
-//
-//        menuOthers.setText("Others");
-//
-//        menuItemChangeUsername.setText("Change username");
-//        menuItemChangeUsername.addActionListener(e -> {
-//            if (client.isDatabaseConnected()) {
-//                try {
-//                    client.changeUsername();
-//                } catch (IOException ioException) {
-//                    ioException.printStackTrace();
-//                }
-//            }
-//        });
-//        menuOthers.add(menuItemChangeUsername);
-//
-//        menuBar.add(menuDatabase);
-//        menuBar.add(menuOthers);
-//
-//        setJMenuBar(menuBar);
-//
-//        GroupLayout layout = new GroupLayout(getContentPane());
-//        getContentPane().setLayout(layout);
-//        layout.setHorizontalGroup(
-//                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                        .addGroup(layout.createSequentialGroup()
-//                                .addGap(5, 5, 5)
-//                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                                        .addGroup(layout.createSequentialGroup()
-//                                                .addComponent(radioButtonSendMessageToAll)
-//                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-//                                                .addComponent(radioButtonSendPrivateMessageToSelectedUser)
-//                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//                                                .addComponent(buttonClearChatLog, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(0, 0, 0)
-//                                                .addComponent(buttonChangeInputColor, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(0, 0, 0)
-//                                                .addComponent(buttonSoundOptions, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(0, 0, 0)
-//                                                .addComponent(buttonChatLog, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(0, 0, 0)
-//                                                .addComponent(buttonMoveToSystemTray, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(0, 0, 0)
-//                                                .addComponent(buttonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(0, 5, Short.MAX_VALUE))
-//                                        .addGroup(layout.createSequentialGroup()
-//                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                                                        .addComponent(textFieldUserInputMessage)
-//                                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-//                                                                .addComponent(scrollPanelForChatLog)
-//                                                                .addGap(5, 5, 5)
-//                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-//                                                                        .addComponent(scrollPanelForUserListOnline, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-//                                                                        .addComponent(buttonConnectToServer, GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-//                                                                        .addComponent(buttonDisconnectToServer, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))
-//                                                .addGap(5, 5, 5))))
-//        );
-//        layout.setVerticalGroup(
-//                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-//                                .addGap(5, 5, 5)
-//                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                                        .addGroup(layout.createSequentialGroup()
-//                                                .addComponent(buttonConnectToServer, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-//                                                .addGap(5, 5, 5)
-//                                                .addComponent(buttonDisconnectToServer)
-//                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//                                                .addComponent(scrollPanelForUserListOnline, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
-//                                        .addComponent(scrollPanelForChatLog))
-//                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//                                .addComponent(textFieldUserInputMessage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                .addGap(5, 5, 5)
-//                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-//                                        .addComponent(radioButtonSendMessageToAll)
-//                                        .addComponent(radioButtonSendPrivateMessageToSelectedUser)
-//                                        .addComponent(buttonClearChatLog, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addComponent(buttonChangeInputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addComponent(buttonSoundOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addComponent(buttonChatLog, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addComponent(buttonMoveToSystemTray, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addComponent(buttonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-//                                .addGap(5, 5, 5))
-//        );
-//
-//        setVisible(true);
-//        pack();
-
         buttonGroup = new javax.swing.ButtonGroup();
         radioButtonSendMessageToAll = new javax.swing.JRadioButton();
         radioButtonSendPrivateMessageToSelectedUser = new javax.swing.JRadioButton();
@@ -657,21 +369,11 @@ public class ClientGuiView extends JFrame {
         setVisible(true);
     }
 
-    /**
-     * Добавляет сообщение в чат
-     *
-     * @param text сообщение которое будет добавлено в чат
-     */
     protected void addMessage(String text) {
         textAreaChatLog.append("[" + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "] " + text);
         MakeSound.playSound("new-message.wav");
     }
 
-    /**
-     * Метод обновляющий списо имен подлючившихся пользователей
-     *
-     * @param allUserNames список пользователей
-     */
     protected void refreshListUsers(Set<String> allUserNames) {
         StringBuilder text = new StringBuilder();
         for (String user : allUserNames) {
@@ -689,22 +391,12 @@ public class ClientGuiView extends JFrame {
         });
     }
 
-    /**
-     * Вызывает окно для ввода адреса сервера
-     *
-     * @return возращает введенное пользователем строку
-     */
     protected String getServerAddress() {
         while (true) {
             return JOptionPane.showInputDialog(this, "Enter the server address:", "Server address input", JOptionPane.QUESTION_MESSAGE).trim();
         }
     }
 
-    /**
-     * Вызывает окно для ввода порт сервера
-     *
-     * @return возращает введенное пользователем число
-     */
     protected int getPort() {
         while (true) {
             String port = JOptionPane.showInputDialog(this, "Enter the server port:", "Server port input", JOptionPane.QUESTION_MESSAGE);
@@ -717,28 +409,15 @@ public class ClientGuiView extends JFrame {
         }
     }
 
-    /**
-     * Вызывает окна для ввода имени пользователя
-     *
-     * @return возращает введенное пользователем строку
-     */
     protected String getUserName() {
         return JOptionPane.showInputDialog(this, "Enter your username:", "Username input", JOptionPane.QUESTION_MESSAGE);
     }
 
-    /**
-     * Вызывает окно ошибки с заданным текстом
-     *
-     * @param text ошибка с заданным текстом
-     */
     protected void errorDialogWindow(String text) {
         MakeSound.playSound("failed.wav");
         JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Вызывает окно куда можно сохранить историю сообщении
-     */
     private void saveToFile() {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showSaveDialog(new JButton("Save")) == JFileChooser.APPROVE_OPTION) {

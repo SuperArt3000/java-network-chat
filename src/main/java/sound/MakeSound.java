@@ -10,9 +10,6 @@ public class MakeSound {
 
     private static boolean soundOptions;
 
-    /**
-     * @param url имя файла, который будет воспроизводиться
-     */
     public static synchronized void playSound(final String url) {
         if (!soundOptions) {
             new Thread(() -> {

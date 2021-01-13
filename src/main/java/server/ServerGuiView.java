@@ -14,9 +14,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /**
- * Данный класс отвечает за отображение данных пользователю.
- * Все, что видит пользователь, генерируется видом.
- *
  * @author Zurbaevi Nika
  */
 public class ServerGuiView extends JFrame {
@@ -38,18 +35,10 @@ public class ServerGuiView extends JFrame {
     private JCheckBoxMenuItem checkBoxItemAlwaysOnTop;
     private JMenu menuOthers;
 
-    /**
-     * Конструктор с определенными значениями
-     *
-     * @param server сервер
-     */
     public ServerGuiView(ServerGuiController server) {
         this.server = server;
     }
 
-    /**
-     * Метод инициализирующий графический интерфейс серверного приложения
-     */
     protected void initComponents() {
         panelMain = new JPanel();
         panelTextArea = new JPanel();
@@ -157,18 +146,10 @@ public class ServerGuiView extends JFrame {
         pack();
     }
 
-    /**
-     * Метод который добавляет в текстовое окно новое сообщение
-     *
-     * @param serviceMessage сообщение
-     */
     public void refreshDialogWindowServer(String serviceMessage) {
         textAreaLog.append(serviceMessage);
     }
 
-    /**
-     * Вызывает окно куда можно сохранить историю логов
-     */
     private void saveToFile() {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showSaveDialog(new JButton("Save")) == JFileChooser.APPROVE_OPTION) {
@@ -186,9 +167,6 @@ public class ServerGuiView extends JFrame {
         }
     }
 
-    /**
-     * Вызывает окно откуда можно открыть историю логов
-     */
     private void openToFile() {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION) {

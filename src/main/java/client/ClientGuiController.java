@@ -11,41 +11,17 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * В этом классе хранится код, который отвечает за обработку действий пользователя
- *
  * @author Zurbaevi Nika
  */
 public class ClientGuiController {
-    /**
-     * Обьект который будет посылать сообщение или принимать от сервера
-     */
     private Connection connection;
-    /**
-     * Обьект который содержит всю бизнес-логику приложения (хранится множетство подключившихся пользователей)
-     */
     private ClientGuiModel model;
-    /**
-     * Обьект отвечает за отображение данных пользователю. Все, что видит пользователь
-     */
     private ClientGuiView view;
 
-    /**
-     * Флаг отобаржающий состояние подключения клиента на сервер
-     */
     private volatile boolean clientConnected;
-
-    /**
-     * Имя клиента
-     */
     private String userName;
-
     private boolean isDatabaseConnected;
 
-    /**
-     * Точка входа программы
-     *
-     * @param args аргументы командной строки в Java
-     */
     public static void main(String[] args) {
         ClientGuiController clientGuiController = new ClientGuiController();
         clientGuiController.run(clientGuiController);
@@ -59,27 +35,14 @@ public class ClientGuiController {
         isDatabaseConnected = databaseConnected;
     }
 
-    /**
-     * Метод возращающий true если подключен килент иначе false
-     *
-     * @return возращающий true если подключен килент иначе false
-     */
     public boolean isClientConnected() {
         return clientConnected;
     }
 
-    /**
-     * Метод устанавливающий состояние подключение клиента
-     *
-     * @param clientConnected устанавливающий состояние подключение клиента
-     */
     public void setClientConnected(boolean clientConnected) {
         this.clientConnected = clientConnected;
     }
 
-    /**
-     * Точка входа в клиентское приложение
-     */
     public void run(ClientGuiController clientGuiController) {
         model = new ClientGuiModel();
         view = new ClientGuiView(clientGuiController);
@@ -96,9 +59,6 @@ public class ClientGuiController {
         }
     }
 
-    /**
-     * Метод подключение клиента к серверу
-     */
     protected void connectToServer() {
         if (!clientConnected) {
             while (true) {
@@ -121,9 +81,6 @@ public class ClientGuiController {
         this.userName = userName;
     }
 
-    /**
-     * Метод реализующий пользователя со стороны клиента
-     */
     protected void userNameRegistration() {
         while (true) {
             try {
@@ -157,11 +114,6 @@ public class ClientGuiController {
         }
     }
 
-    /**
-     * Метод отправки сообщения предназначенного для других пользователей на сервер
-     *
-     * @param text сообщение которое будет отправлено на сервер
-     */
     protected void sendMessageOnServer(String text) {
         try {
             connection.send(new Message(MessageType.TEXT_MESSAGE, text));
@@ -183,9 +135,6 @@ public class ClientGuiController {
         }
     }
 
-    /**
-     * Метод принимающий сообщение с сервера от других клиентов
-     */
     protected void receiveMessageFromServer() {
         while (clientConnected) {
             try {
@@ -229,9 +178,6 @@ public class ClientGuiController {
         }
     }
 
-    /**
-     * Метод реализующий отключение клиента от чата
-     */
     protected void disableClient() {
         try {
             if (clientConnected) {

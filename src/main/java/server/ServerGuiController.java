@@ -13,43 +13,21 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * В этом классе хранится код, который отвечает за обработку действий пользователя
- *
  * @author Zurbaevi Nika
  */
 public class ServerGuiController {
-    /**
-     * Объект класса представления
-     */
+
     private ServerGuiView gui;
-    /**
-     * Объект класса модели
-     */
     private ServerGuiModel model;
-    /**
-     * Серверный сокет, где мы слушаем клиентские подключения.
-     */
     private ServerSocket serverSocket;
-    /**
-     * Флаг отражающий состояние сервера запущен/остановлен
-     */
+
     private volatile boolean isServerStart;
 
-    /**
-     * Точка входа для приложения сервера
-     *
-     * @param args аргументы командной строки в Java
-     */
     public static void main(String[] args) {
         ServerGuiController serverGuiController = new ServerGuiController();
         serverGuiController.run(serverGuiController);
     }
 
-    /**
-     * Точка входа для приложения сервера
-     *
-     * @param serverGuiController сервер
-     */
     public void run(ServerGuiController serverGuiController) {
         gui = new ServerGuiView(serverGuiController);
         model = new ServerGuiModel();
@@ -62,11 +40,6 @@ public class ServerGuiController {
         }
     }
 
-    /**
-     * Метод, запускающий сервер
-     *
-     * @param port порт
-     */
     protected void startServer(int port) {
         try {
             serverSocket = new ServerSocket(port);
@@ -77,9 +50,6 @@ public class ServerGuiController {
         }
     }
 
-    /**
-     * Метод останавливающий сервер
-     */
     protected void stopServer() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
@@ -97,9 +67,6 @@ public class ServerGuiController {
         }
     }
 
-    /**
-     * Метод в котором в бесконечном цикле сервер принимает новое сокетное подключение от клиента
-     */
     protected void acceptServer() {
         while (true) {
             try {
@@ -111,11 +78,6 @@ public class ServerGuiController {
         }
     }
 
-    /**
-     * Метод, рассылающий заданное сообщение всем клиентам из мапы
-     *
-     * @param message сообщение
-     */
     protected void sendMessageAllUsers(Message message) {
         for (Map.Entry<String, Connection> user : model.getAllUsersChat().entrySet()) {
             try {
@@ -149,31 +111,13 @@ public class ServerGuiController {
         }
     }
 
-    /**
-     * Класс-поток, который запускается при принятии сервером нового сокетного соединения с клиентом, в конструктор
-     * передается объект класса Socket
-     */
     private class ServerThread extends Thread {
-        /**
-         * Соединение сокета с сервером.
-         */
         private Socket socket;
 
-        /**
-         * Конструктор с определенными значениями
-         *
-         * @param socket сокет для соединение
-         */
         public ServerThread(Socket socket) {
             this.socket = socket;
         }
 
-        /**
-         * Метод который реализует запрос сервера у клиента имени и добавлении имени в мапу
-         *
-         * @param connection пользователь
-         * @return имя пользователя или же null
-         */
         private String requestAndAddingUser(Connection connection) {
             while (true) {
                 try {
@@ -199,12 +143,6 @@ public class ServerGuiController {
             }
         }
 
-        /**
-         * Метод, реализующий обмен сообщениями между пользователями
-         *
-         * @param connection пользователь
-         * @param userName   имя пользователя
-         */
         private void messagingBetweenUsers(Connection connection, String userName) {
             while (true) {
                 try {

@@ -2,6 +2,9 @@ package database;
 
 import java.sql.*;
 
+/**
+ * @author Zurbaevi Nika
+ */
 public class SQLService {
     private static Connection connection;
     private static PreparedStatement preparedStatementGetNicknameByLoginAndPassword;
