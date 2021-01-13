@@ -4,7 +4,6 @@ package server;
 import connection.Connection;
 import connection.Message;
 import connection.MessageType;
-import database.SQLService;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -155,7 +154,7 @@ public class ServerGuiController {
                         sendPrivateMessage(new Message(MessageType.PRIVATE_MESSAGE_TEXT, message.getTextMessage() + " " + userName));
                     }
                     if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
-                        sendMessageAllUsers(new Message(MessageType.CHANGE_NAME_ACCEPTED, String.format("%s changed nickname to %s", userName, message.getTextMessage())));
+                        sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", userName, message.getTextMessage())));
                         String tempName = userName;
                         Connection tempConnection = model.getConnection(userName);
                         model.removeUser(tempName);

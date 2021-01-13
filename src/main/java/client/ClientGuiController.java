@@ -142,7 +142,7 @@ public class ClientGuiController {
                 if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
                     view.addMessage(message.getTextMessage());
                 }
-                if (message.getTypeMessage() == MessageType.CHANGE_NAME_ACCEPTED) {
+                if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
                     String[] data = message.getTextMessage().split(" ");
                     view.addMessage(message.getTextMessage() + "\n");
                     model.deleteUser(data[0]);

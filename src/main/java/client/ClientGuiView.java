@@ -83,7 +83,7 @@ public class ClientGuiView extends JFrame {
         buttonSignOut = new javax.swing.JButton();
         buttonDisconnectToServer = new javax.swing.JButton();
 
-        setTitle("Network chat");
+        setTitle("Chat");
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1100, 400));
         setPreferredSize(new java.awt.Dimension(1100, 400));
@@ -159,14 +159,14 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/notes.png")))); // NOI18N
+        buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/save-log.png")))); // NOI18N
         buttonChatLog.setToolTipText("Chat log");
         buttonChatLog.setMaximumSize(new java.awt.Dimension(50, 25));
         buttonChatLog.setMinimumSize(new java.awt.Dimension(50, 25));
         buttonChatLog.setPreferredSize(new java.awt.Dimension(50, 25));
         buttonChatLog.addActionListener(e -> saveToFile());
 
-        buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/moving-truck.png")))); // NOI18N
+        buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/move-tray.png")))); // NOI18N
         buttonMoveToSystemTray.setToolTipText("Move to system tray");
         buttonMoveToSystemTray.setMaximumSize(new java.awt.Dimension(50, 25));
         buttonMoveToSystemTray.setMinimumSize(new java.awt.Dimension(50, 25));
@@ -179,7 +179,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/send (3).png")))); // NOI18N
+        buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/send-message.png")))); // NOI18N
         buttonSend.setText("Send");
         buttonSend.setToolTipText("Send message");
         buttonSend.setMaximumSize(new java.awt.Dimension(50, 25));

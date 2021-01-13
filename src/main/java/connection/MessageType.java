@@ -14,5 +14,4 @@ public enum MessageType {
     REMOVED_USER,
     PRIVATE_MESSAGE_TEXT,
     USERNAME_CHANGED,
-    CHANGE_NAME_ACCEPTED;
 }

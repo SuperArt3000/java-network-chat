@@ -50,5 +50,4 @@ public class Message implements Serializable {
     public String getTextMessage() {
         return textMessage;
     }
-
 }

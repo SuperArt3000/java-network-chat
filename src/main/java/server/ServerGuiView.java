@@ -1,17 +1,16 @@
 package server;
 
-import database.SQLService;
+import client.ClientGuiView;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * @author Zurbaevi Nika
@@ -21,129 +20,93 @@ public class ServerGuiView extends JFrame {
 
     private JButton buttonStartServer;
     private JButton buttonStopServer;
-    private JLabel labelPort;
-    private JPanel panelConfiguration;
-    private JPanel panelMain;
-    private JPanel panelTextArea;
-    private JScrollPane scrollPanelTextArea;
+    private JScrollPane scrollPanel;
     private JTextArea textAreaLog;
-    private JTextField textFieldInputPort;
-    private JMenu menu;
-    private JMenuBar menuBar;
-    private JMenuItem menuItemLoadLog;
-    private JMenuItem menuItemSaveLog;
-    private JCheckBoxMenuItem checkBoxItemAlwaysOnTop;
-    private JMenu menuOthers;
+    private JButton buttonSaveLog;
 
     public ServerGuiView(ServerGuiController server) {
         this.server = server;
+
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ClientGuiView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
     }
 
     protected void initComponents() {
-        panelMain = new JPanel();
-        panelTextArea = new JPanel();
-        scrollPanelTextArea = new JScrollPane();
-        textAreaLog = new JTextArea();
-        panelConfiguration = new JPanel();
-        labelPort = new JLabel();
-        textFieldInputPort = new JTextField();
         buttonStartServer = new JButton();
         buttonStopServer = new JButton();
-        menuBar = new JMenuBar();
-        menu = new JMenu();
-        menuItemSaveLog = new JMenuItem();
-        menuItemLoadLog = new JMenuItem();
-        menuOthers = new JMenu();
-        checkBoxItemAlwaysOnTop = new JCheckBoxMenuItem();
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Server");
-        setMinimumSize(new Dimension(800, 200));
-        setPreferredSize(new Dimension(800, 200));
-        setLocationRelativeTo(null);
-        panelMain.setLayout(new BorderLayout());
-        getContentPane().add(panelMain, BorderLayout.PAGE_END);
-        panelTextArea.setLayout(new BorderLayout());
-        textFieldInputPort.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    try {
-                        server.startServer(Integer.parseInt(textFieldInputPort.getText()));
-                    } catch (Exception exception) {
-                        refreshDialogWindowServer("Incorrect server port entered.\n");
-                    }
-                }
-            }
-        });
+        scrollPanel = new JScrollPane();
+        textAreaLog = new JTextArea();
+        buttonSaveLog = new JButton();
 
+        setTitle("Server");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 300));
+        setPreferredSize(new java.awt.Dimension(500, 300));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                SQLService.disconnect();
+                server.stopServer();
                 System.exit(0);
             }
         });
 
+        buttonStartServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/start-server.png"))));
+        buttonStartServer.setText("Start server");
+        buttonStartServer.addActionListener(e -> server.startServer(getPortFromOptionPane()));
+
+        buttonStopServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/stop-server.png"))));
+        buttonStopServer.setText("Stop server");
+        buttonStopServer.addActionListener(e -> server.stopServer());
+
+        buttonSaveLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/save-log.png"))));
+        buttonSaveLog.setText("Save log");
+        buttonSaveLog.addActionListener(e -> saveToFile());
+
         textAreaLog.setEditable(false);
         textAreaLog.setColumns(20);
         textAreaLog.setRows(5);
-        scrollPanelTextArea.setViewportView(textAreaLog);
-        panelTextArea.add(scrollPanelTextArea, BorderLayout.CENTER);
-        panelConfiguration.setLayout(new BoxLayout(panelConfiguration, BoxLayout.LINE_AXIS));
-        labelPort.setText("Port:");
-        panelConfiguration.add(labelPort);
-        panelConfiguration.add(textFieldInputPort);
-        buttonStartServer.setText("Start server");
-        buttonStartServer.setMargin(new Insets(2, 80, 2, 80));
-        buttonStartServer.addActionListener(e -> {
-            try {
-                server.startServer(Integer.parseInt(textFieldInputPort.getText()));
-                textFieldInputPort.setText("");
-            } catch (Exception exception) {
-                refreshDialogWindowServer("Incorrect server port entered.\n");
-            }
-        });
-        panelConfiguration.add(buttonStartServer);
-        buttonStopServer.setText("Stop server");
-        buttonStopServer.setMargin(new Insets(2, 80, 2, 80));
-        buttonStopServer.addActionListener(e -> {
-            server.stopServer();
-            textFieldInputPort.setText("");
-        });
-        panelConfiguration.add(buttonStopServer);
-        panelTextArea.add(panelConfiguration, BorderLayout.PAGE_END);
-        getContentPane().add(panelTextArea, BorderLayout.CENTER);
-        menu.setText("File");
-        menuItemSaveLog.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        menuItemSaveLog.setText("Save log");
-//        menuItemSaveLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/SAVE.png"))));
-        menuItemSaveLog.addActionListener(e -> saveToFile());
-        menu.add(menuItemSaveLog);
-        menuItemLoadLog.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        menuItemLoadLog.setText("Load log");
-//        menuItemLoadLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/OPEN.png"))));
-        menuItemLoadLog.setToolTipText("");
-        menuItemLoadLog.addActionListener(e -> openToFile());
-        menu.add(menuItemLoadLog);
-        menuBar.add(menu);
-        menuOthers.setText("Others");
-        checkBoxItemAlwaysOnTop.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        checkBoxItemAlwaysOnTop.setSelected(false);
-        checkBoxItemAlwaysOnTop.setText("Always on top");
-        checkBoxItemAlwaysOnTop.addActionListener(e -> {
-            if (checkBoxItemAlwaysOnTop.getState()) {
-                checkBoxItemAlwaysOnTop.setSelected(true);
-                setAlwaysOnTop(true);
-            } else {
-                checkBoxItemAlwaysOnTop.setSelected(false);
-                setAlwaysOnTop(false);
-            }
-        });
-        menuOthers.add(checkBoxItemAlwaysOnTop);
-        menuBar.add(menuOthers);
-        setJMenuBar(menuBar);
-        setVisible(true);
+        scrollPanel.setViewportView(textAreaLog);
+
+
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(buttonStartServer, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(buttonStopServer, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(buttonSaveLog, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                                        .addComponent(scrollPanel))
+                                .addGap(5, 5, 5))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(scrollPanel, GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(buttonStartServer, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonStopServer, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonSaveLog, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(5, 5, 5))
+        );
+
         pack();
+        setVisible(true);
     }
 
     public void refreshDialogWindowServer(String serviceMessage) {
@@ -167,18 +130,15 @@ public class ServerGuiView extends JFrame {
         }
     }
 
-    private void openToFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+    protected int getPortFromOptionPane() {
+        while (true) {
+            String port = JOptionPane.showInputDialog(this, "Enter the server port:", "Server port input", JOptionPane.QUESTION_MESSAGE);
             try {
-                Scanner scanner = new Scanner(new FileInputStream(file));
-                while (scanner.hasNext()) {
-                    textAreaLog.append(scanner.nextLine() + "\n");
-                }
-                scanner.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                return Integer.parseInt(port.trim());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        this, "Incorrect server port entered. Try again.", "Server port input error", JOptionPane.ERROR_MESSAGE
+                );
             }
         }
     }
