@@ -2,6 +2,7 @@ package server;
 
 import client.ClientGuiView;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -57,6 +58,12 @@ public class ServerGuiView extends JFrame {
                 System.exit(0);
             }
         });
+
+        try {
+            setIconImage(ImageIO.read(new File("default.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         buttonStartServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/start-server.png"))));
         buttonStartServer.setText("Start server");
