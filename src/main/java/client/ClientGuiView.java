@@ -93,6 +93,7 @@ public class ClientGuiView extends JFrame {
                 if (client.isClientConnected()) {
                     client.disableClient();
                 }
+                SQLService.closeConnection();
                 System.exit(0);
             }
         });

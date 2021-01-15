@@ -47,9 +47,6 @@ public class ClientGuiController {
         model = new ClientGuiModel();
         view = new ClientGuiView(clientGuiController);
         view.initComponents();
-        if (!SQLService.connect()) {
-            throw new RuntimeException("Failed to connect to database");
-        }
         while (true) {
             if (clientGuiController.isClientConnected()) {
                 clientGuiController.userNameRegistration();
