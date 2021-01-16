@@ -9,25 +9,25 @@ import java.util.Map;
  * @author Zurbaevi Nika
  */
 public class ServerGuiModel {
-    private Map<String, Connection> allUsersMultiChat = new HashMap<>();
+    private Map<String, Connection> allUsers = new HashMap<>();
 
     protected Map<String, Connection> getAllUsersChat() {
-        return allUsersMultiChat;
+        return allUsers;
     }
 
-    protected String getName(String nameUser) {
-        return allUsersMultiChat.get(nameUser).toString();
+    protected String getName(String nickname) {
+        return allUsers.get(nickname).toString();
     }
 
-    protected Connection getConnection(String userName) {
-        return allUsersMultiChat.get(userName);
+    protected Connection getConnection(String nickname) {
+        return allUsers.get(nickname);
     }
 
-    protected void addUser(String nameUser, Connection connection) {
-        allUsersMultiChat.put(nameUser, connection);
+    protected void addUser(String nickname, Connection connection) {
+        allUsers.put(nickname, connection);
     }
 
-    protected void removeUser(String nameUser) {
-        allUsersMultiChat.remove(nameUser);
+    protected void removeUser(String nickname) {
+        allUsers.remove(nickname);
     }
 }

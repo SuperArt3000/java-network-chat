@@ -19,7 +19,7 @@ public class ClientGuiController {
     private ClientGuiView view;
 
     private volatile boolean clientConnected;
-    private String userName;
+    private String nickname;
     private boolean isDatabaseConnected;
 
     public static void main(String[] args) {
@@ -74,8 +74,8 @@ public class ClientGuiController {
         }
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     protected void userNameRegistration() {
@@ -83,8 +83,8 @@ public class ClientGuiController {
             try {
                 Message message = connection.receive();
                 if (message.getTypeMessage() == MessageType.REQUEST_NAME_USER) {
-                    userName = SQLService.getNickname(userName);
-                    connection.send(new Message(MessageType.USER_NAME, userName));
+                    nickname = SQLService.getNickname(nickname);
+                    connection.send(new Message(MessageType.USER_NAME, nickname));
                 }
                 if (message.getTypeMessage() == MessageType.NAME_USED) {
                     view.errorDialogWindow("A user with this name is already in the chat");
@@ -93,7 +93,7 @@ public class ClientGuiController {
                     break;
                 }
                 if (message.getTypeMessage() == MessageType.NAME_ACCEPTED) {
-                    view.addMessage(String.format("Your name is accepted (%s)\n", userName));
+                    view.addMessage(String.format("Your name is accepted (%s)\n", nickname));
                     model.setUsers(message.getListUsers());
                     break;
                 }
@@ -121,7 +121,7 @@ public class ClientGuiController {
 
     protected void sendPrivateMessageOnServer(String... data) {
         try {
-            if (!userName.equals(data[0])) {
+            if (!nickname.equals(data[0])) {
                 view.addMessage(String.format("Private message sent to user (%s)\n", data[0]));
                 connection.send(new Message(MessageType.PRIVATE_MESSAGE_TEXT, data));
             } else {
@@ -144,32 +144,32 @@ public class ClientGuiController {
                     view.addMessage(message.getTextMessage() + "\n");
                     model.deleteUser(data[0]);
                     model.addUser(data[data.length - 1]);
-                    view.refreshListUsers(model.getAllUserNames());
+                    view.refreshListUsers(model.getAllNickname());
                 }
                 if (message.getTypeMessage() == MessageType.PRIVATE_MESSAGE_TEXT) {
                     String[] data = message.getTextMessage().split(" ");
-                    StringBuilder stringBuilder = new StringBuilder();
+                    StringBuilder formattingForSendingPrivateMessage = new StringBuilder();
                     for (int i = 1; i < data.length - 1; i++) {
-                        stringBuilder.append(data[i]).append(" ");
+                        formattingForSendingPrivateMessage.append(data[i]).append(" ");
                     }
-                    view.addMessage(String.format("Private message from (%s): %s\n", data[data.length - 1], stringBuilder.toString()));
+                    view.addMessage(String.format("Private message from (%s): %s\n", data[data.length - 1], formattingForSendingPrivateMessage.toString()));
                 }
                 if (message.getTypeMessage() == MessageType.USER_ADDED) {
                     model.addUser(message.getTextMessage());
                     MakeSound.playSound("connected.wav");
-                    view.refreshListUsers(model.getAllUserNames());
+                    view.refreshListUsers(model.getAllNickname());
                     view.addMessage(String.format("(%s) has joined the chat.\n", message.getTextMessage()));
                 }
                 if (message.getTypeMessage() == MessageType.REMOVED_USER) {
                     model.deleteUser(message.getTextMessage());
                     MakeSound.playSound("disconnected.wav");
-                    view.refreshListUsers(model.getAllUserNames());
+                    view.refreshListUsers(model.getAllNickname());
                     view.addMessage(String.format("(%s) has left the chat.\n", message.getTextMessage()));
                 }
             } catch (Exception e) {
                 view.errorDialogWindow("An error occurred while receiving a message from the server.");
                 setClientConnected(false);
-                view.refreshListUsers(model.getAllUserNames());
+                view.refreshListUsers(model.getAllNickname());
                 break;
             }
         }
@@ -179,9 +179,9 @@ public class ClientGuiController {
         try {
             if (clientConnected) {
                 connection.send(new Message(MessageType.DISABLE_USER));
-                model.getAllUserNames().clear();
+                model.getAllNickname().clear();
                 clientConnected = false;
-                view.refreshListUsers(model.getAllUserNames());
+                view.refreshListUsers(model.getAllNickname());
                 view.addMessage("You have disconnected from the server.\n");
             } else {
                 view.errorDialogWindow("You are already disconnected.");
@@ -192,13 +192,13 @@ public class ClientGuiController {
     }
 
     public void changeUsername() throws IOException {
-        String newUsername = view.getUserName();
-        if (SQLService.changeNick(userName, newUsername)) {
-            model.deleteUser(userName);
-            userName = newUsername;
-            model.addUser(newUsername);
-            view.refreshListUsers(model.getAllUserNames());
-            connection.send(new Message(MessageType.USERNAME_CHANGED, newUsername));
+        String newNickname = view.getNickname();
+        if (SQLService.changeNick(nickname, newNickname)) {
+            model.deleteUser(nickname);
+            nickname = newNickname;
+            model.addUser(newNickname);
+            view.refreshListUsers(model.getAllNickname());
+            connection.send(new Message(MessageType.USERNAME_CHANGED, newNickname));
         }
     }
 }

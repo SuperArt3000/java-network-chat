@@ -122,16 +122,16 @@ public class ServerGuiController {
                 try {
                     connection.send(new Message(MessageType.REQUEST_NAME_USER));
                     Message responseMessage = connection.receive();
-                    String userName = responseMessage.getTextMessage();
-                    if (responseMessage.getTypeMessage() == MessageType.USER_NAME && userName != null && !userName.isEmpty() && !model.getAllUsersChat().containsKey(userName)) {
-                        model.addUser(userName, connection);
+                    String nickname = responseMessage.getTextMessage();
+                    if (responseMessage.getTypeMessage() == MessageType.USER_NAME && nickname != null && !nickname.isEmpty() && !model.getAllUsersChat().containsKey(nickname)) {
+                        model.addUser(nickname, connection);
                         Set<String> listUsers = new HashSet<>();
                         for (Map.Entry<String, Connection> users : model.getAllUsersChat().entrySet()) {
                             listUsers.add(users.getKey());
                         }
                         connection.send(new Message(MessageType.NAME_ACCEPTED, listUsers));
-                        sendMessageAllUsers(new Message(MessageType.USER_ADDED, userName));
-                        return userName;
+                        sendMessageAllUsers(new Message(MessageType.USER_ADDED, nickname));
+                        return nickname;
                     } else {
                         connection.send(new Message(MessageType.NAME_USED));
                     }
@@ -142,35 +142,35 @@ public class ServerGuiController {
             }
         }
 
-        private void messagingBetweenUsers(Connection connection, String userName) {
+        private void messagingBetweenUsers(Connection connection, String nickname) {
             while (true) {
                 try {
                     Message message = connection.receive();
                     if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
-                        String textMessage = String.format("%s: %s\n", userName, message.getTextMessage());
+                        String textMessage = String.format("%s: %s\n", nickname, message.getTextMessage());
                         sendMessageAllUsers(new Message(MessageType.TEXT_MESSAGE, textMessage));
                     }
                     if (message.getTypeMessage() == MessageType.PRIVATE_MESSAGE_TEXT) {
-                        sendPrivateMessage(new Message(MessageType.PRIVATE_MESSAGE_TEXT, message.getTextMessage() + " " + userName));
+                        sendPrivateMessage(new Message(MessageType.PRIVATE_MESSAGE_TEXT, message.getTextMessage() + " " + nickname));
                     }
                     if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
-                        sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", userName, message.getTextMessage())));
-                        String tempName = userName;
-                        Connection tempConnection = model.getConnection(userName);
+                        sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", nickname, message.getTextMessage())));
+                        String tempName = nickname;
+                        Connection tempConnection = model.getConnection(nickname);
                         model.removeUser(tempName);
-                        userName = message.getTextMessage();
-                        model.addUser(userName, tempConnection);
+                        nickname = message.getTextMessage();
+                        model.addUser(nickname, tempConnection);
                     }
                     if (message.getTypeMessage() == MessageType.DISABLE_USER) {
-                        sendMessageAllUsers(new Message(MessageType.REMOVED_USER, userName));
-                        model.removeUser(userName);
+                        sendMessageAllUsers(new Message(MessageType.REMOVED_USER, nickname));
+                        model.removeUser(nickname);
                         connection.close();
                         gui.refreshDialogWindowServer(String.format("Remote access user %s disconnected.\n", socket.getRemoteSocketAddress()));
                         break;
                     }
                 } catch (Exception e) {
-                    gui.refreshDialogWindowServer(String.format("An error occurred while sending a message from the user %s, either disconnected!\n", userName));
-                    model.removeUser(userName);
+                    gui.refreshDialogWindowServer(String.format("An error occurred while sending a message from the user %s, either disconnected!\n", nickname));
+                    model.removeUser(nickname);
                     break;
                 }
             }

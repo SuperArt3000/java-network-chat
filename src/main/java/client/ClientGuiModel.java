@@ -7,21 +7,21 @@ import java.util.Set;
  * @author Zurbaevi Nika
  */
 public class ClientGuiModel {
-    private Set<String> allUserNames = new HashSet<>();
+    private Set<String> allUserNicknames = new HashSet<>();
 
-    protected Set<String> getAllUserNames() {
-        return allUserNames;
+    protected Set<String> getAllNickname() {
+        return allUserNicknames;
     }
 
-    protected void addUser(String userName) {
-        allUserNames.add(userName);
+    protected void addUser(String nickname) {
+        allUserNicknames.add(nickname);
     }
 
-    protected void deleteUser(String userName) {
-        allUserNames.remove(userName);
+    protected void deleteUser(String nickname) {
+        allUserNicknames.remove(nickname);
     }
 
     protected void setUsers(Set<String> users) {
-        this.allUserNames = users;
+        this.allUserNicknames = users;
     }
 }

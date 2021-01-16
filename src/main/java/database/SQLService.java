@@ -102,10 +102,10 @@ public class SQLService {
         }
     }
 
-    public static boolean changeNick(String oldNick, String newNick) {
+    public static boolean changeNick(String oldNickname, String newNickname) {
         try {
-            preparedStatementChangeNick.setString(1, newNick);
-            preparedStatementChangeNick.setString(2, oldNick);
+            preparedStatementChangeNick.setString(1, newNickname);
+            preparedStatementChangeNick.setString(2, oldNickname);
             preparedStatementChangeNick.executeUpdate();
             return true;
         } catch (SQLException e) {

@@ -25,25 +25,25 @@ public class ClientGuiView extends JFrame {
 
     private final ClientGuiController client;
 
-    private javax.swing.JButton buttonChangeInputColor;
-    private javax.swing.JButton buttonChangeName;
-    private javax.swing.JButton buttonChatLog;
-    private javax.swing.JButton buttonConnectionToServer;
-    private javax.swing.JButton buttonDisconnectToServer;
-    private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JButton buttonMoveToSystemTray;
-    private javax.swing.JButton buttonRegistration;
-    private javax.swing.JButton buttonSend;
-    private javax.swing.JButton buttonSignIn;
-    private javax.swing.JButton buttonSignOut;
-    private javax.swing.JButton buttonSoundOptions;
-    private javax.swing.JList<String> listUserOnline;
-    private javax.swing.JRadioButton radioButtonSendMessageToAll;
-    private javax.swing.JRadioButton radioButtonSendPrivateMessageToSelectedUser;
-    private javax.swing.JScrollPane scrollPanelForChatLog;
-    private javax.swing.JScrollPane scrollPanelForUserListOnline;
-    private javax.swing.JTextArea textAreaChatLog;
-    private javax.swing.JTextField textFieldUserInputMessage;
+    private JButton buttonChangeInputColor;
+    private JButton buttonChangeName;
+    private JButton buttonChatLog;
+    private JButton buttonConnectionToServer;
+    private JButton buttonDisconnectToServer;
+    private ButtonGroup buttonGroup;
+    private JButton buttonMoveToSystemTray;
+    private JButton buttonRegistration;
+    private JButton buttonSend;
+    private JButton buttonSignIn;
+    private JButton buttonSignOut;
+    private JButton buttonSoundOptions;
+    private JList<String> listUserOnline;
+    private JRadioButton radioButtonSendMessageToAll;
+    private JRadioButton radioButtonSendPrivateMessageToSelectedUser;
+    private JScrollPane scrollPanelForChatLog;
+    private JScrollPane scrollPanelForUserListOnline;
+    private JTextArea textAreaChatLog;
+    private JTextField textFieldUserInputMessage;
 
     private boolean radioButtonCheckPrivateOrNot;
 
@@ -51,9 +51,9 @@ public class ClientGuiView extends JFrame {
         this.client = clientGuiController;
 
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
@@ -63,28 +63,28 @@ public class ClientGuiView extends JFrame {
     }
 
     protected void initComponents() {
-        buttonGroup = new javax.swing.ButtonGroup();
-        radioButtonSendMessageToAll = new javax.swing.JRadioButton();
-        radioButtonSendPrivateMessageToSelectedUser = new javax.swing.JRadioButton();
-        buttonChangeName = new javax.swing.JButton();
-        buttonChangeInputColor = new javax.swing.JButton();
-        buttonSoundOptions = new javax.swing.JButton();
-        buttonChatLog = new javax.swing.JButton();
-        buttonMoveToSystemTray = new javax.swing.JButton();
-        buttonSend = new javax.swing.JButton();
-        textFieldUserInputMessage = new javax.swing.JTextField();
-        scrollPanelForUserListOnline = new javax.swing.JScrollPane();
-        listUserOnline = new javax.swing.JList<>();
-        buttonConnectionToServer = new javax.swing.JButton();
-        scrollPanelForChatLog = new javax.swing.JScrollPane();
-        textAreaChatLog = new javax.swing.JTextArea();
-        buttonRegistration = new javax.swing.JButton();
-        buttonSignIn = new javax.swing.JButton();
-        buttonSignOut = new javax.swing.JButton();
-        buttonDisconnectToServer = new javax.swing.JButton();
+        buttonGroup = new ButtonGroup();
+        radioButtonSendMessageToAll = new JRadioButton();
+        radioButtonSendPrivateMessageToSelectedUser = new JRadioButton();
+        buttonChangeName = new JButton();
+        buttonChangeInputColor = new JButton();
+        buttonSoundOptions = new JButton();
+        buttonChatLog = new JButton();
+        buttonMoveToSystemTray = new JButton();
+        buttonSend = new JButton();
+        textFieldUserInputMessage = new JTextField();
+        scrollPanelForUserListOnline = new JScrollPane();
+        listUserOnline = new JList<>();
+        buttonConnectionToServer = new JButton();
+        scrollPanelForChatLog = new JScrollPane();
+        textAreaChatLog = new JTextArea();
+        buttonRegistration = new JButton();
+        buttonSignIn = new JButton();
+        buttonSignOut = new JButton();
+        buttonDisconnectToServer = new JButton();
 
         setTitle("Chat");
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1100, 400));
         setPreferredSize(new java.awt.Dimension(1100, 400));
         addWindowListener(new WindowAdapter() {
@@ -296,74 +296,74 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(radioButtonSendMessageToAll)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(radioButtonSendPrivateMessageToSelectedUser)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(buttonSignIn)
                                                 .addGap(0, 0, 0)
                                                 .addComponent(buttonSignOut)
                                                 .addGap(0, 0, 0)
                                                 .addComponent(buttonRegistration)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(buttonChangeName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(buttonChangeName, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(buttonChangeInputColor, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(buttonChangeInputColor, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(buttonSoundOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(buttonSoundOptions, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(buttonChatLog, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(buttonChatLog, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(buttonMoveToSystemTray, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(buttonMoveToSystemTray, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, 0)
-                                                .addComponent(buttonSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(buttonSend, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addComponent(textFieldUserInputMessage)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                 .addComponent(scrollPanelForChatLog)
                                                 .addGap(5, 5, 5)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(buttonDisconnectToServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(buttonConnectionToServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(scrollPanelForUserListOnline, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(buttonDisconnectToServer, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(buttonConnectionToServer, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(scrollPanelForUserListOnline, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))))
                                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(buttonConnectionToServer, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(buttonConnectionToServer, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(buttonDisconnectToServer)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(scrollPanelForUserListOnline, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(scrollPanelForUserListOnline, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                                         .addComponent(scrollPanelForChatLog))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textFieldUserInputMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(textFieldUserInputMessage, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(buttonChangeInputColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(buttonSoundOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(buttonChangeInputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(buttonSoundOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                 .addComponent(radioButtonSendMessageToAll)
                                                 .addComponent(radioButtonSendPrivateMessageToSelectedUser)
                                                 .addComponent(buttonSend))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                 .addComponent(buttonRegistration)
                                                 .addComponent(buttonSignIn)
                                                 .addComponent(buttonSignOut))
-                                        .addComponent(buttonChatLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(buttonMoveToSystemTray, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(buttonChangeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(buttonChatLog, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(buttonMoveToSystemTray, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(buttonChangeName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(5, 5, 5))
         );
         pack();
@@ -375,15 +375,15 @@ public class ClientGuiView extends JFrame {
         MakeSound.playSound("new-message.wav");
     }
 
-    protected void refreshListUsers(Set<String> allUserNames) {
+    protected void refreshListUsers(Set<String> allUserNicknames) {
         StringBuilder text = new StringBuilder();
-        for (String user : allUserNames) {
+        for (String user : allUserNicknames) {
             text.append(user).append("\n");
         }
         String[] strings = text.toString().split("\n");
         listUserOnline.setModel(new AbstractListModel<>() {
             public int getSize() {
-                return allUserNames.size();
+                return allUserNicknames.size();
             }
 
             public String getElementAt(int i) {
@@ -410,7 +410,7 @@ public class ClientGuiView extends JFrame {
         }
     }
 
-    protected String getUserName() {
+    protected String getNickname() {
         return JOptionPane.showInputDialog(this, "Enter your username:", "Username input", JOptionPane.QUESTION_MESSAGE);
     }
 
@@ -457,13 +457,13 @@ public class ClientGuiView extends JFrame {
 
     protected void userLogin() {
         JPasswordField passwordField = new JPasswordField();
-        JTextField textFieldUsername = new JTextField();
-        int usernameDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, textFieldUsername, "Enter Username", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        JTextField textFieldNickname = new JTextField();
+        int usernameDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, textFieldNickname, "Enter Nickname", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         int passwordDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (passwordDialog == JOptionPane.OK_OPTION && usernameDialog == JOptionPane.OK_OPTION) {
-            if (SQLService.getNicknameByLoginAndPassword(textFieldUsername.getText(), String.valueOf(passwordField.getPassword())) != null) {
+            if (SQLService.getNicknameByLoginAndPassword(textFieldNickname.getText(), String.valueOf(passwordField.getPassword())) != null) {
                 JOptionPane.showMessageDialog(ClientGuiView.this, "You are successfully logged in", "Sign in", JOptionPane.INFORMATION_MESSAGE);
-                client.setUserName(textFieldUsername.getText());
+                client.setNickname(textFieldNickname.getText());
                 client.setDatabaseConnected(true);
             } else {
                 JOptionPane.showMessageDialog(ClientGuiView.this, "Failed to login", "Sign in", JOptionPane.ERROR_MESSAGE);
@@ -474,13 +474,13 @@ public class ClientGuiView extends JFrame {
 
     protected void userRegistration() {
         JPasswordField passwordField = new JPasswordField();
-        JTextField textFieldUsername = new JTextField();
-        int usernameDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, textFieldUsername, "Enter Username", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        JTextField textFieldNickname = new JTextField();
+        int usernameDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, textFieldNickname, "Enter Nickname", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         int passwordDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (passwordDialog == JOptionPane.OK_OPTION && usernameDialog == JOptionPane.OK_OPTION) {
-            if (SQLService.registration(textFieldUsername.getText(), String.valueOf(passwordField.getPassword()))) {
+            if (SQLService.registration(textFieldNickname.getText(), String.valueOf(passwordField.getPassword()))) {
                 JOptionPane.showMessageDialog(ClientGuiView.this, "You are successfully registration", "Registration", JOptionPane.INFORMATION_MESSAGE);
-                client.setUserName(textFieldUsername.getText());
+                client.setNickname(textFieldNickname.getText());
             } else {
                 JOptionPane.showMessageDialog(ClientGuiView.this, "Failed to registration", "Registration", JOptionPane.ERROR_MESSAGE);
             }
