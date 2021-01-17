@@ -16,6 +16,8 @@ public class SQLService {
     private static PreparedStatement preparedStatementRegistration;
     private static PreparedStatement preparedStatementChangeNick;
 
+    private static boolean isConnected = false;
+
     private SQLService() {
         try {
             loadConnection();
@@ -27,11 +29,16 @@ public class SQLService {
         }
     }
 
+    public static boolean isConnected() {
+        return isConnected;
+    }
+
     public static SQLService getInstance() {
         if (instance == null) {
             synchronized (SQLService.class) {
                 if (instance == null) {
                     instance = new SQLService();
+                    isConnected = true;
                 }
             }
         }
@@ -83,27 +90,18 @@ public class SQLService {
         return true;
     }
 
-    public static boolean changeNick(String oldNickname, String newNickname) {
-        try {
-            preparedStatementChangeNick.setString(1, newNickname);
-            preparedStatementChangeNick.setString(2, oldNickname);
-            preparedStatementChangeNick.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public static boolean changeNick(String oldNickname, String newNickname) throws SQLException {
+        preparedStatementChangeNick.setString(1, newNickname);
+        preparedStatementChangeNick.setString(2, oldNickname);
+        preparedStatementChangeNick.executeUpdate();
+        return true;
     }
 
-    public static void closeConnection() {
-        try {
-            preparedStatementRegistration.close();
-            preparedStatementGetNicknameByLoginAndPassword.close();
-            preparedStatementChangeNick.close();
-            connection.close();
-            connection = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void closeConnection() throws SQLException {
+        preparedStatementRegistration.close();
+        preparedStatementGetNicknameByLoginAndPassword.close();
+        preparedStatementChangeNick.close();
+        connection.close();
+        connection = null;
     }
 }

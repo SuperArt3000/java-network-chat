@@ -2,6 +2,9 @@ package app;
 
 import server.ServerGuiController;
 
+/**
+ * @author Zurbaevi Nika
+ */
 public class RunServer {
     public static void main(String[] args) {
         ServerGuiController serverGuiController = new ServerGuiController();

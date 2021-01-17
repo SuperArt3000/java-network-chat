@@ -1,6 +1,5 @@
 package validator;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -15,17 +14,14 @@ public class Validator {
     private static final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
 
     public static boolean isValidNickname(final String nickname) {
-        Matcher matcher = nicknamePattern.matcher(nickname);
-        return matcher.matches();
+        return nicknamePattern.matcher(nickname).matches();
     }
 
     public static boolean isValidPassword(final String password) {
-        Matcher matcher = passwordPattern.matcher(password);
-        return matcher.matches();
+        return passwordPattern.matcher(password).matches();
     }
 
     public static boolean isValidChangeNickname(final String nickname) {
-        Matcher matcher = nicknamePattern.matcher(nickname);
-        return matcher.matches();
+        return nicknamePattern.matcher(nickname).matches();
     }
 }

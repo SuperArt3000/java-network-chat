@@ -9,6 +9,7 @@ import validator.Validator;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 /**
  * @author Zurbaevi Nika
@@ -199,18 +200,22 @@ public class ClientGuiController {
 
     public void changeNickname() {
         String newNickname = view.getNickname();
-        if (Validator.isValidChangeNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
-            model.deleteUser(nickname);
-            nickname = newNickname;
-            model.addUser(newNickname);
-            view.refreshListUsers(model.getAllNickname());
-            try {
-                connection.send(new Message(MessageType.USERNAME_CHANGED, newNickname));
-            } catch (IOException e) {
-                view.errorDialogWindow(e.getMessage());
+        try {
+            if (Validator.isValidChangeNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
+                model.deleteUser(nickname);
+                nickname = newNickname;
+                model.addUser(newNickname);
+                view.refreshListUsers(model.getAllNickname());
+                try {
+                    connection.send(new Message(MessageType.USERNAME_CHANGED, newNickname));
+                } catch (IOException e) {
+                    view.errorDialogWindow(e.getMessage());
+                }
+            } else {
+                view.errorDialogWindow("Enter correct data");
             }
-        } else {
-            view.errorDialogWindow("Enter correct data");
+        } catch (SQLException sqlException) {
+            view.errorDialogWindow(sqlException.getMessage());
         }
     }
 

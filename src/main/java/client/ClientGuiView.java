@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -97,7 +98,13 @@ public class ClientGuiView extends JFrame {
                 if (client.isClientConnected()) {
                     client.disableClient();
                 }
-                SQLService.closeConnection();
+                try {
+                    if (SQLService.isConnected()) {
+                        SQLService.closeConnection();
+                    }
+                } catch (SQLException sqlException) {
+                    errorDialogWindow(sqlException.getMessage());
+                }
                 System.exit(0);
             }
         });
