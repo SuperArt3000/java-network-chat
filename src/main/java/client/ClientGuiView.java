@@ -1,5 +1,7 @@
 package client;
 
+import authorization.Login;
+import authorization.Registration;
 import database.SQLService;
 import sound.MakeSound;
 
@@ -50,6 +52,8 @@ public class ClientGuiView extends JFrame {
     public ClientGuiView(ClientGuiController clientGuiController) {
         this.client = clientGuiController;
 
+        SQLService.getInstance();
+
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -85,8 +89,8 @@ public class ClientGuiView extends JFrame {
 
         setTitle("Chat");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1100, 400));
-        setPreferredSize(new java.awt.Dimension(1100, 400));
+        setMinimumSize(new java.awt.Dimension(840, 400));
+        setPreferredSize(new java.awt.Dimension(840, 400));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -97,6 +101,7 @@ public class ClientGuiView extends JFrame {
                 System.exit(0);
             }
         });
+        setLocationRelativeTo(null);
 
         try {
             setIconImage(ImageIO.read(new File("default.png")));
@@ -115,19 +120,9 @@ public class ClientGuiView extends JFrame {
 
         buttonChangeName.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/change-name.png")))); // NOI18N
         buttonChangeName.setToolTipText("Change name");
-        buttonChangeName.setMaximumSize(new java.awt.Dimension(50, 25));
-        buttonChangeName.setMinimumSize(new java.awt.Dimension(50, 25));
-        buttonChangeName.setPreferredSize(new java.awt.Dimension(50, 25));
+        buttonChangeName.setEnabled(false);
         buttonChangeName.addActionListener(e -> {
-            if (client.isDatabaseConnected()) {
-                try {
-                    client.changeUsername();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            } else {
-                errorDialogWindow("Connect to database to change nickname");
-            }
+            client.changeNickname();
         });
 
         buttonChangeInputColor.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/color-wheel.png")))); // NOI18N
@@ -162,30 +157,17 @@ public class ClientGuiView extends JFrame {
 
         buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/save-log.png")))); // NOI18N
         buttonChatLog.setToolTipText("Chat log");
-        buttonChatLog.setMaximumSize(new java.awt.Dimension(50, 25));
-        buttonChatLog.setMinimumSize(new java.awt.Dimension(50, 25));
-        buttonChatLog.setPreferredSize(new java.awt.Dimension(50, 25));
         buttonChatLog.addActionListener(e -> saveToFile());
 
         buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/move-tray.png")))); // NOI18N
         buttonMoveToSystemTray.setToolTipText("Move to system tray");
-        buttonMoveToSystemTray.setMaximumSize(new java.awt.Dimension(50, 25));
-        buttonMoveToSystemTray.setMinimumSize(new java.awt.Dimension(50, 25));
-        buttonMoveToSystemTray.setPreferredSize(new java.awt.Dimension(50, 25));
         buttonMoveToSystemTray.addActionListener(e -> {
-            try {
-                moveToSystemTray();
-            } catch (IOException | AWTException ioException) {
-                ioException.printStackTrace();
-            }
+            moveToSystemTray();
         });
 
         buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/send-message.png")))); // NOI18N
         buttonSend.setText("Send");
         buttonSend.setToolTipText("Send message");
-        buttonSend.setMaximumSize(new java.awt.Dimension(50, 25));
-        buttonSend.setMinimumSize(new java.awt.Dimension(50, 25));
-        buttonSend.setPreferredSize(new java.awt.Dimension(50, 25));
         buttonSend.addActionListener(e -> {
             if (!textFieldUserInputMessage.getText().equals("")) {
                 if (radioButtonCheckPrivateOrNot) {
@@ -232,67 +214,82 @@ public class ClientGuiView extends JFrame {
         scrollPanelForChatLog.setViewportView(textAreaChatLog);
 
         buttonRegistration.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/registration.png")))); // NOI18N
-        buttonRegistration.setText("Registration");
+        buttonRegistration.setText("");
         buttonRegistration.setToolTipText("Database registration");
-        buttonRegistration.setMaximumSize(new java.awt.Dimension(125, 25));
-        buttonRegistration.setMinimumSize(new java.awt.Dimension(125, 25));
-        buttonRegistration.setPreferredSize(new java.awt.Dimension(125, 25));
         buttonRegistration.addActionListener(e -> {
             if (!client.isDatabaseConnected()) {
-                userRegistration();
-            } else {
-                errorDialogWindow("Log out of the database to register");
+                Registration registration = new Registration(this);
+                registration.setVisible(true);
+                if (registration.isSucceeded()) {
+                    client.setNickname(registration.getNickname());
+                }
             }
         });
 
         buttonSignIn.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/sign-in.png")))); // NOI18N
-        buttonSignIn.setText("Sign in");
+        buttonSignIn.setText("");
         buttonSignIn.setToolTipText("Database sign in");
-        buttonSignIn.setMaximumSize(new java.awt.Dimension(100, 25));
-        buttonSignIn.setMinimumSize(new java.awt.Dimension(100, 25));
-        buttonSignIn.setPreferredSize(new java.awt.Dimension(100, 25));
         buttonSignIn.addActionListener(e -> {
             if (!client.isDatabaseConnected()) {
-                userLogin();
-            } else {
-                errorDialogWindow("You are already connected to the database");
+                Login loginDialog = new Login(this);
+                loginDialog.setVisible(true);
+                if (loginDialog.isSucceeded()) {
+                    client.setNickname(loginDialog.getNickname());
+                    client.setDatabaseConnected(true);
+                    buttonSignIn.setEnabled(false);
+                    buttonSignOut.setEnabled(true);
+                    buttonConnectionToServer.setEnabled(true);
+                    buttonRegistration.setEnabled(false);
+                }
             }
         });
 
         buttonSignOut.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/sign-out.png")))); // NOI18N
-        buttonSignOut.setText("Sign out");
+        buttonSignOut.setText("");
         buttonSignOut.setToolTipText("Database sign out");
-        buttonSignOut.setMaximumSize(new java.awt.Dimension(100, 25));
-        buttonSignOut.setMinimumSize(new java.awt.Dimension(100, 25));
-        buttonSignOut.setPreferredSize(new java.awt.Dimension(100, 25));
+        buttonSignOut.setEnabled(false);
         buttonSignOut.addActionListener(e -> {
             if (client.isDatabaseConnected()) {
                 client.setDatabaseConnected(false);
-
-            } else {
-                errorDialogWindow("You are not connected to the database");
+                buttonSignOut.setEnabled(false);
+                buttonSignIn.setEnabled(true);
+                buttonConnectionToServer.setEnabled(false);
+                buttonDisconnectToServer.setEnabled(false);
+                buttonRegistration.setEnabled(true);
+                buttonChangeName.setEnabled(false);
+                if (client.isClientConnected()) {
+                    client.disableClient();
+                }
             }
         });
 
         buttonConnectionToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/connection.png")))); // NOI18N
         buttonConnectionToServer.setText("Connect");
         buttonConnectionToServer.setToolTipText("Connect to server");
+        buttonConnectionToServer.setEnabled(false);
         buttonConnectionToServer.addActionListener(e -> {
             if (client.isDatabaseConnected()) {
                 client.connectToServer();
-            } else {
-                errorDialogWindow("Connect to database to login to server");
+                if (client.isClientConnected()) {
+                    buttonDisconnectToServer.setEnabled(true);
+                    buttonConnectionToServer.setEnabled(false);
+                    buttonChangeName.setEnabled(true);
+                }
             }
         });
 
         buttonDisconnectToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/disconnected.png")))); // NOI18N
         buttonDisconnectToServer.setText("Disconnect");
         buttonDisconnectToServer.setToolTipText("Disconnect to server");
+        buttonDisconnectToServer.setEnabled(false);
         buttonDisconnectToServer.addActionListener(e -> {
             if (client.isClientConnected()) {
                 client.disableClient();
-            } else {
-                errorDialogWindow("You are already disconnected from the server");
+                if (!client.isClientConnected()) {
+                    buttonConnectionToServer.setEnabled(true);
+                    buttonDisconnectToServer.setEnabled(false);
+                    buttonChangeName.setEnabled(false);
+                }
             }
         });
 
@@ -404,7 +401,6 @@ public class ClientGuiView extends JFrame {
             try {
                 return Integer.parseInt(port.trim());
             } catch (Exception e) {
-                MakeSound.playSound("failed.wav");
                 JOptionPane.showMessageDialog(this, "Incorrect server port entered. Try again.", "Server port input error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -415,7 +411,7 @@ public class ClientGuiView extends JFrame {
     }
 
     protected void errorDialogWindow(String text) {
-        MakeSound.playSound("failed.wav");
+
         JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
@@ -437,53 +433,25 @@ public class ClientGuiView extends JFrame {
         }
     }
 
-    private void moveToSystemTray() throws IOException, AWTException {
-        BufferedImage Icon = ImageIO.read(new File("default.png"));
-        final TrayIcon trayIcon = new TrayIcon(Icon, "Network chat");
-        setVisible(false);
-        SystemTray systemTray = SystemTray.getSystemTray();
-        systemTray.add(trayIcon);
-        trayIcon.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    setVisible(true);
-                    setExtendedState(JFrame.NORMAL);
-                    systemTray.remove(trayIcon);
+    private void moveToSystemTray() {
+        try {
+            BufferedImage Icon = ImageIO.read(new File("default.png"));
+            final TrayIcon trayIcon = new TrayIcon(Icon, "Network chat");
+            setVisible(false);
+            SystemTray systemTray = SystemTray.getSystemTray();
+            systemTray.add(trayIcon);
+            trayIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        setVisible(true);
+                        setExtendedState(JFrame.NORMAL);
+                        systemTray.remove(trayIcon);
+                    }
                 }
-            }
-        });
-    }
-
-    protected void userLogin() {
-        JPasswordField passwordField = new JPasswordField();
-        JTextField textFieldNickname = new JTextField();
-        int usernameDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, textFieldNickname, "Enter Nickname", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        int passwordDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (passwordDialog == JOptionPane.OK_OPTION && usernameDialog == JOptionPane.OK_OPTION) {
-            if (SQLService.getNicknameByLoginAndPassword(textFieldNickname.getText(), String.valueOf(passwordField.getPassword())) != null) {
-                JOptionPane.showMessageDialog(ClientGuiView.this, "You are successfully logged in", "Sign in", JOptionPane.INFORMATION_MESSAGE);
-                client.setNickname(textFieldNickname.getText());
-                client.setDatabaseConnected(true);
-            } else {
-                JOptionPane.showMessageDialog(ClientGuiView.this, "Failed to login", "Sign in", JOptionPane.ERROR_MESSAGE);
-                client.setDatabaseConnected(false);
-            }
-        }
-    }
-
-    protected void userRegistration() {
-        JPasswordField passwordField = new JPasswordField();
-        JTextField textFieldNickname = new JTextField();
-        int usernameDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, textFieldNickname, "Enter Nickname", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        int passwordDialog = JOptionPane.showConfirmDialog(ClientGuiView.this, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (passwordDialog == JOptionPane.OK_OPTION && usernameDialog == JOptionPane.OK_OPTION) {
-            if (SQLService.registration(textFieldNickname.getText(), String.valueOf(passwordField.getPassword()))) {
-                JOptionPane.showMessageDialog(ClientGuiView.this, "You are successfully registration", "Registration", JOptionPane.INFORMATION_MESSAGE);
-                client.setNickname(textFieldNickname.getText());
-            } else {
-                JOptionPane.showMessageDialog(ClientGuiView.this, "Failed to registration", "Registration", JOptionPane.ERROR_MESSAGE);
-            }
+            });
+        } catch (IOException | AWTException e) {
+            errorDialogWindow(e.getMessage());
         }
     }
 }

@@ -9,15 +9,13 @@ import java.net.Socket;
 /**
  * @author Zurbaevi Nika
  */
-public class Connection implements Closeable {
+public class Network implements Closeable {
 
     private final Socket socket;
-
     private final ObjectOutputStream out;
-
     private final ObjectInputStream in;
 
-    public Connection(Socket socket) throws IOException {
+    public Network(Socket socket) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());

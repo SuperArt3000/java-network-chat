@@ -1,11 +1,11 @@
 package client;
 
-
-import connection.Connection;
 import connection.Message;
 import connection.MessageType;
+import connection.Network;
 import database.SQLService;
 import sound.MakeSound;
+import validator.Validator;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -14,34 +14,13 @@ import java.net.Socket;
  * @author Zurbaevi Nika
  */
 public class ClientGuiController {
-    private Connection connection;
+    private Network connection;
     private ClientGuiModel model;
     private ClientGuiView view;
 
     private volatile boolean clientConnected;
     private String nickname;
     private boolean isDatabaseConnected;
-
-    public static void main(String[] args) {
-        ClientGuiController clientGuiController = new ClientGuiController();
-        clientGuiController.run(clientGuiController);
-    }
-
-    public boolean isDatabaseConnected() {
-        return isDatabaseConnected;
-    }
-
-    public void setDatabaseConnected(boolean databaseConnected) {
-        isDatabaseConnected = databaseConnected;
-    }
-
-    public boolean isClientConnected() {
-        return clientConnected;
-    }
-
-    public void setClientConnected(boolean clientConnected) {
-        this.clientConnected = clientConnected;
-    }
 
     public void run(ClientGuiController clientGuiController) {
         model = new ClientGuiModel();
@@ -56,28 +35,6 @@ public class ClientGuiController {
         }
     }
 
-    protected void connectToServer() {
-        if (!clientConnected) {
-            while (true) {
-                try {
-                    connection = new Connection(new Socket(view.getServerAddress(), view.getPort()));
-                    clientConnected = true;
-                    view.addMessage("You have connected to the server.\n");
-                    break;
-                } catch (Exception e) {
-                    view.errorDialogWindow("An error has occurred! Perhaps you entered the wrong server address or port. try again");
-                    break;
-                }
-            }
-        } else {
-            view.errorDialogWindow("You are already connected!");
-        }
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     protected void userNameRegistration() {
         while (true) {
             try {
@@ -89,7 +46,6 @@ public class ClientGuiController {
                 if (message.getTypeMessage() == MessageType.NAME_USED) {
                     view.errorDialogWindow("A user with this name is already in the chat");
                     disableClient();
-                    if (connection != null) connection.close();
                     break;
                 }
                 if (message.getTypeMessage() == MessageType.NAME_ACCEPTED) {
@@ -111,60 +67,24 @@ public class ClientGuiController {
         }
     }
 
-    protected void sendMessageOnServer(String text) {
-        try {
-            connection.send(new Message(MessageType.TEXT_MESSAGE, text));
-        } catch (Exception e) {
-            view.errorDialogWindow("Error sending message");
-        }
-    }
-
-    protected void sendPrivateMessageOnServer(String... data) {
-        try {
-            if (!nickname.equals(data[0])) {
-                view.addMessage(String.format("Private message sent to user (%s)\n", data[0]));
-                connection.send(new Message(MessageType.PRIVATE_MESSAGE_TEXT, data));
-            } else {
-                view.errorDialogWindow("You cannot send a private message to yourself");
-            }
-        } catch (Exception e) {
-            view.errorDialogWindow("Error sending message");
-        }
-    }
-
     protected void receiveMessageFromServer() {
         while (clientConnected) {
             try {
                 Message message = connection.receive();
                 if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
-                    view.addMessage(message.getTextMessage());
+                    processIncomingMessage(message);
                 }
                 if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
-                    String[] data = message.getTextMessage().split(" ");
-                    view.addMessage(message.getTextMessage() + "\n");
-                    model.deleteUser(data[0]);
-                    model.addUser(data[data.length - 1]);
-                    view.refreshListUsers(model.getAllNickname());
+                    notifyNicknameChanged(message);
                 }
-                if (message.getTypeMessage() == MessageType.PRIVATE_MESSAGE_TEXT) {
-                    String[] data = message.getTextMessage().split(" ");
-                    StringBuilder formattingForSendingPrivateMessage = new StringBuilder();
-                    for (int i = 1; i < data.length - 1; i++) {
-                        formattingForSendingPrivateMessage.append(data[i]).append(" ");
-                    }
-                    view.addMessage(String.format("Private message from (%s): %s\n", data[data.length - 1], formattingForSendingPrivateMessage.toString()));
+                if (message.getTypeMessage() == MessageType.PRIVATE_TEXT_MESSAGE) {
+                    processingOfPrivateMessagesForSending(message);
                 }
                 if (message.getTypeMessage() == MessageType.USER_ADDED) {
-                    model.addUser(message.getTextMessage());
-                    MakeSound.playSound("connected.wav");
-                    view.refreshListUsers(model.getAllNickname());
-                    view.addMessage(String.format("(%s) has joined the chat.\n", message.getTextMessage()));
+                    informAboutAddingNewUser(message);
                 }
                 if (message.getTypeMessage() == MessageType.REMOVED_USER) {
-                    model.deleteUser(message.getTextMessage());
-                    MakeSound.playSound("disconnected.wav");
-                    view.refreshListUsers(model.getAllNickname());
-                    view.addMessage(String.format("(%s) has left the chat.\n", message.getTextMessage()));
+                    informAboutDeletingNewUser(message);
                 }
             } catch (Exception e) {
                 view.errorDialogWindow("An error occurred while receiving a message from the server.");
@@ -173,6 +93,49 @@ public class ClientGuiController {
                 break;
             }
         }
+    }
+
+    public boolean isClientConnected() {
+        return clientConnected;
+    }
+
+    public void setClientConnected(boolean clientConnected) {
+        this.clientConnected = clientConnected;
+    }
+
+    protected void informAboutAddingNewUser(Message message) {
+        model.addUser(message.getTextMessage());
+        MakeSound.playSound("connected.wav");
+        view.refreshListUsers(model.getAllNickname());
+        view.addMessage(String.format("(%s) has joined the chat.\n", message.getTextMessage()));
+    }
+
+    protected void informAboutDeletingNewUser(Message message) {
+        model.deleteUser(message.getTextMessage());
+        MakeSound.playSound("disconnected.wav");
+        view.refreshListUsers(model.getAllNickname());
+        view.addMessage(String.format("(%s) has left the chat.\n", message.getTextMessage()));
+    }
+
+    protected void processingOfPrivateMessagesForSending(Message message) {
+        String[] data = message.getTextMessage().split(" ");
+        StringBuilder formattingForSendingPrivateMessage = new StringBuilder();
+        for (int i = 1; i < data.length - 1; i++) {
+            formattingForSendingPrivateMessage.append(data[i]).append(" ");
+        }
+        view.addMessage(String.format("Private message from (%s): %s\n", data[data.length - 1], formattingForSendingPrivateMessage.toString()));
+    }
+
+    protected void notifyNicknameChanged(Message message) {
+        String[] data = message.getTextMessage().split(" ");
+        view.addMessage(message.getTextMessage() + "\n");
+        model.deleteUser(data[0]);
+        model.addUser(data[data.length - 1]);
+        view.refreshListUsers(model.getAllNickname());
+    }
+
+    protected void processIncomingMessage(Message message) {
+        view.addMessage(message.getTextMessage());
     }
 
     protected void disableClient() {
@@ -191,14 +154,71 @@ public class ClientGuiController {
         }
     }
 
-    public void changeUsername() throws IOException {
+    protected void connectToServer() {
+        if (!clientConnected) {
+            while (true) {
+                try {
+                    connection = new Network(new Socket(view.getServerAddress(), view.getPort()));
+                    clientConnected = true;
+                    view.addMessage("You have connected to the server.\n");
+                    break;
+                } catch (Exception e) {
+                    view.errorDialogWindow("An error has occurred! Perhaps you entered the wrong server address or port. try again");
+                    break;
+                }
+            }
+        } else {
+            view.errorDialogWindow("You are already connected!");
+        }
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    protected void sendMessageOnServer(String text) {
+        try {
+            connection.send(new Message(MessageType.TEXT_MESSAGE, text));
+        } catch (Exception e) {
+            view.errorDialogWindow("Error sending message");
+        }
+    }
+
+    protected void sendPrivateMessageOnServer(String... data) {
+        try {
+            if (!nickname.equals(data[0])) {
+                view.addMessage(String.format("Private message sent to user (%s)\n", data[0]));
+                connection.send(new Message(MessageType.PRIVATE_TEXT_MESSAGE, data));
+            } else {
+                view.errorDialogWindow("You cannot send a private message to yourself");
+            }
+        } catch (Exception e) {
+            view.errorDialogWindow("Error sending message");
+        }
+    }
+
+    public void changeNickname() {
         String newNickname = view.getNickname();
-        if (SQLService.changeNick(nickname, newNickname)) {
+        if (Validator.isValidChangeNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
             model.deleteUser(nickname);
             nickname = newNickname;
             model.addUser(newNickname);
             view.refreshListUsers(model.getAllNickname());
-            connection.send(new Message(MessageType.USERNAME_CHANGED, newNickname));
+            try {
+                connection.send(new Message(MessageType.USERNAME_CHANGED, newNickname));
+            } catch (IOException e) {
+                view.errorDialogWindow(e.getMessage());
+            }
+        } else {
+            view.errorDialogWindow("Enter correct data");
         }
+    }
+
+    public boolean isDatabaseConnected() {
+        return isDatabaseConnected;
+    }
+
+    public void setDatabaseConnected(boolean databaseConnected) {
+        isDatabaseConnected = databaseConnected;
     }
 }

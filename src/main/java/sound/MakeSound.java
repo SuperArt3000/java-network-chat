@@ -1,7 +1,9 @@
 package sound;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.util.Objects;
-import javax.sound.sampled.*;
 
 /**
  * @author Zurbaevi Nika

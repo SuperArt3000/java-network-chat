@@ -1,17 +1,14 @@
 package database;
 
-import sound.MakeSound;
-
-import javax.swing.*;
 import java.sql.*;
 
 /**
  * @author Zurbaevi Nika
  */
 public class SQLService {
-    public static final SQLService INSTANCE = new SQLService();
     private static final String URL_CONNECTION_DATABASE = "jdbc:sqlite:usersDatabase.db";
     private static final String DRIVER = "org.sqlite.JDBC";
+    private static SQLService instance;
     private static Connection connection;
 
     private static PreparedStatement preparedStatementGetNicknameByLoginAndPassword;
@@ -20,86 +17,70 @@ public class SQLService {
     private static PreparedStatement preparedStatementChangeNick;
 
     private SQLService() {
-        loadConnection();
-        loadDriver();
-        prepareAllStatements();
-    }
-
-    public static SQLService getINSTANCE() {
-        return SQLService.INSTANCE;
-    }
-
-    private static void loadConnection() {
         try {
-            connection = DriverManager.getConnection(URL_CONNECTION_DATABASE);
-        } catch (SQLException e) {
-            errorDialogWindow(e.getMessage());
+            loadConnection();
+            loadDriver();
+            prepareAllStatements();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
             System.exit(0);
         }
     }
 
-    private static void loadDriver() {
-        try {
-            Class.forName(DRIVER);
-        } catch (Exception e) {
-            errorDialogWindow(e.getMessage());
-            System.exit(0);
-        }
-    }
-
-    private static void prepareAllStatements() {
-        try {
-            preparedStatementGetNicknameByLoginAndPassword = connection.prepareStatement("SELECT Username FROM users WHERE Username = ? AND Password = ?;");
-            preparedStatementGetNickname = connection.prepareStatement("SELECT Username FROM users WHERE Username = ?");
-            preparedStatementRegistration = connection.prepareStatement("INSERT INTO users (Username, Password) VALUES (?, ?);");
-            preparedStatementChangeNick = connection.prepareStatement("UPDATE users SET Username = ? WHERE Username = ?;");
-        } catch (SQLException e) {
-            errorDialogWindow(e.getMessage());
-            System.exit(0);
-        }
-    }
-
-    public static String getNickname(String nickname) {
-        String nick = null;
-        try {
-            preparedStatementGetNickname.setString(1, nickname);
-            ResultSet resultSet = preparedStatementGetNickname.executeQuery();
-            if (resultSet.next()) {
-                nick = resultSet.getString(1);
+    public static SQLService getInstance() {
+        if (instance == null) {
+            synchronized (SQLService.class) {
+                if (instance == null) {
+                    instance = new SQLService();
+                }
             }
-            resultSet.close();
-        } catch (SQLException e) {
-            errorDialogWindow(e.getMessage());
         }
+        return instance;
+    }
+
+    private static void loadConnection() throws SQLException {
+        connection = DriverManager.getConnection(URL_CONNECTION_DATABASE);
+    }
+
+    private static void loadDriver() throws ClassNotFoundException {
+        Class.forName(DRIVER);
+    }
+
+    private static void prepareAllStatements() throws SQLException {
+        preparedStatementGetNicknameByLoginAndPassword = connection.prepareStatement("SELECT Username FROM users WHERE Username = ? AND Password = ?;");
+        preparedStatementGetNickname = connection.prepareStatement("SELECT Username FROM users WHERE Username = ?");
+        preparedStatementRegistration = connection.prepareStatement("INSERT INTO users (Username, Password) VALUES (?, ?);");
+        preparedStatementChangeNick = connection.prepareStatement("UPDATE users SET Username = ? WHERE Username = ?;");
+    }
+
+    public static String getNickname(String nickname) throws SQLException {
+        String nick = null;
+        preparedStatementGetNickname.setString(1, nickname);
+        ResultSet resultSet = preparedStatementGetNickname.executeQuery();
+        if (resultSet.next()) {
+            nick = resultSet.getString(1);
+        }
+        resultSet.close();
         return nick;
     }
 
-    public static String getNicknameByLoginAndPassword(String login, String password) {
+    public static String getNicknameByLoginAndPassword(String login, String password) throws SQLException {
         String nick = null;
-        try {
-            preparedStatementGetNicknameByLoginAndPassword.setString(1, login);
-            preparedStatementGetNicknameByLoginAndPassword.setString(2, password);
-            ResultSet rs = preparedStatementGetNicknameByLoginAndPassword.executeQuery();
-            if (rs.next()) {
-                nick = rs.getString(1);
-            }
-            rs.close();
-        } catch (SQLException e) {
-            errorDialogWindow(e.getMessage());
+        preparedStatementGetNicknameByLoginAndPassword.setString(1, login);
+        preparedStatementGetNicknameByLoginAndPassword.setString(2, password);
+        ResultSet rs = preparedStatementGetNicknameByLoginAndPassword.executeQuery();
+        if (rs.next()) {
+            nick = rs.getString(1);
         }
+        rs.close();
         return nick;
     }
 
-    public static boolean registration(String nickname, String password) {
-        try {
-            preparedStatementRegistration.setString(1, nickname);
-            preparedStatementRegistration.setString(2, password);
-            preparedStatementRegistration.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            errorDialogWindow(e.getMessage());
-            return false;
-        }
+    public static boolean registration(String nickname, String password) throws SQLException {
+        preparedStatementRegistration.setString(1, nickname);
+        preparedStatementRegistration.setString(2, password);
+        preparedStatementRegistration.executeUpdate();
+        return true;
     }
 
     public static boolean changeNick(String oldNickname, String newNickname) {
@@ -124,10 +105,5 @@ public class SQLService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void errorDialogWindow(String text) {
-        MakeSound.playSound("failed.wav");
-        JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

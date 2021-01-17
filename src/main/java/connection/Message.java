@@ -9,9 +9,7 @@ import java.util.Set;
 public class Message implements Serializable {
 
     private MessageType typeMessage;
-
     private String textMessage;
-
     private Set<String> listUsers;
 
     public Message(MessageType typeMessage, String textMessage) {
@@ -19,7 +17,6 @@ public class Message implements Serializable {
         this.typeMessage = typeMessage;
         this.listUsers = null;
     }
-
 
     public Message(MessageType typeMessage, Set<String> listUsers) {
         this.typeMessage = typeMessage;

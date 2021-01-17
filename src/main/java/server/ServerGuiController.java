@@ -1,9 +1,9 @@
 package server;
 
 
-import connection.Connection;
 import connection.Message;
 import connection.MessageType;
+import connection.Network;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,13 +19,7 @@ public class ServerGuiController {
     private ServerGuiView gui;
     private ServerGuiModel model;
     private ServerSocket serverSocket;
-
     private volatile boolean isServerStart;
-
-    public static void main(String[] args) {
-        ServerGuiController serverGuiController = new ServerGuiController();
-        serverGuiController.run(serverGuiController);
-    }
 
     public void run(ServerGuiController serverGuiController) {
         gui = new ServerGuiView(serverGuiController);
@@ -52,11 +46,12 @@ public class ServerGuiController {
     protected void stopServer() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
-                for (Map.Entry<String, Connection> user : model.getAllUsersChat().entrySet()) {
+                for (Map.Entry<String, Network> user : model.getAllUsersChat().entrySet()) {
                     user.getValue().close();
                 }
                 serverSocket.close();
                 model.getAllUsersChat().clear();
+                isServerStart = false;
                 gui.refreshDialogWindowServer("Server stopped.\n");
             } else {
                 gui.refreshDialogWindowServer("The server is not running - there is nothing to stop!\n");
@@ -78,17 +73,7 @@ public class ServerGuiController {
     }
 
     protected void sendMessageAllUsers(Message message) {
-        for (Map.Entry<String, Connection> user : model.getAllUsersChat().entrySet()) {
-            try {
-                user.getValue().send(message);
-            } catch (Exception e) {
-                gui.refreshDialogWindowServer("Error sending message to all users!\n");
-            }
-        }
-    }
-
-    protected void refreshMap(Message message) {
-        for (Map.Entry<String, Connection> user : model.getAllUsersChat().entrySet()) {
+        for (Map.Entry<String, Network> user : model.getAllUsersChat().entrySet()) {
             try {
                 user.getValue().send(message);
             } catch (Exception e) {
@@ -98,7 +83,7 @@ public class ServerGuiController {
     }
 
     protected void sendPrivateMessage(Message message) {
-        for (Map.Entry<String, Connection> user : model.getAllUsersChat().entrySet()) {
+        for (Map.Entry<String, Network> user : model.getAllUsersChat().entrySet()) {
             try {
                 String[] data = message.getTextMessage().split(" ");
                 if (user.getKey().equals(data[0])) {
@@ -110,14 +95,19 @@ public class ServerGuiController {
         }
     }
 
+    public boolean isServerStart() {
+        return isServerStart;
+    }
+
     private class ServerThread extends Thread {
+
         private Socket socket;
 
         public ServerThread(Socket socket) {
             this.socket = socket;
         }
 
-        private String requestAndAddingUser(Connection connection) {
+        private String requestAndAddingUser(Network connection) {
             while (true) {
                 try {
                     connection.send(new Message(MessageType.REQUEST_NAME_USER));
@@ -126,7 +116,7 @@ public class ServerGuiController {
                     if (responseMessage.getTypeMessage() == MessageType.USER_NAME && nickname != null && !nickname.isEmpty() && !model.getAllUsersChat().containsKey(nickname)) {
                         model.addUser(nickname, connection);
                         Set<String> listUsers = new HashSet<>();
-                        for (Map.Entry<String, Connection> users : model.getAllUsersChat().entrySet()) {
+                        for (Map.Entry<String, Network> users : model.getAllUsersChat().entrySet()) {
                             listUsers.add(users.getKey());
                         }
                         connection.send(new Message(MessageType.NAME_ACCEPTED, listUsers));
@@ -142,21 +132,21 @@ public class ServerGuiController {
             }
         }
 
-        private void messagingBetweenUsers(Connection connection, String nickname) {
+        private void messagingBetweenUsers(Network network, String nickname) {
             while (true) {
                 try {
-                    Message message = connection.receive();
+                    Message message = network.receive();
                     if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
                         String textMessage = String.format("%s: %s\n", nickname, message.getTextMessage());
                         sendMessageAllUsers(new Message(MessageType.TEXT_MESSAGE, textMessage));
                     }
-                    if (message.getTypeMessage() == MessageType.PRIVATE_MESSAGE_TEXT) {
-                        sendPrivateMessage(new Message(MessageType.PRIVATE_MESSAGE_TEXT, message.getTextMessage() + " " + nickname));
+                    if (message.getTypeMessage() == MessageType.PRIVATE_TEXT_MESSAGE) {
+                        sendPrivateMessage(new Message(MessageType.PRIVATE_TEXT_MESSAGE, message.getTextMessage() + " " + nickname));
                     }
                     if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
                         sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", nickname, message.getTextMessage())));
                         String tempName = nickname;
-                        Connection tempConnection = model.getConnection(nickname);
+                        Network tempConnection = model.getConnection(nickname);
                         model.removeUser(tempName);
                         nickname = message.getTextMessage();
                         model.addUser(nickname, tempConnection);
@@ -164,7 +154,7 @@ public class ServerGuiController {
                     if (message.getTypeMessage() == MessageType.DISABLE_USER) {
                         sendMessageAllUsers(new Message(MessageType.REMOVED_USER, nickname));
                         model.removeUser(nickname);
-                        connection.close();
+                        network.close();
                         gui.refreshDialogWindowServer(String.format("Remote access user %s disconnected.\n", socket.getRemoteSocketAddress()));
                         break;
                     }
@@ -180,11 +170,12 @@ public class ServerGuiController {
         public void run() {
             gui.refreshDialogWindowServer(String.format("A new user connected with a remote socket - %s.\n", socket.getRemoteSocketAddress()));
             try {
-                Connection connection = new Connection(socket);
+                Network connection = new Network(socket);
                 messagingBetweenUsers(connection, requestAndAddingUser(connection));
             } catch (Exception e) {
                 gui.refreshDialogWindowServer("An error occurred while sending a message from the user!\n");
             }
         }
+
     }
 }

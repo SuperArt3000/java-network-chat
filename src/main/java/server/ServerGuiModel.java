@@ -1,6 +1,6 @@
 package server;
 
-import connection.Connection;
+import connection.Network;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +9,9 @@ import java.util.Map;
  * @author Zurbaevi Nika
  */
 public class ServerGuiModel {
-    private Map<String, Connection> allUsers = new HashMap<>();
+    private Map<String, Network> allUsers = new HashMap<>();
 
-    protected Map<String, Connection> getAllUsersChat() {
+    protected Map<String, Network> getAllUsersChat() {
         return allUsers;
     }
 
@@ -19,11 +19,11 @@ public class ServerGuiModel {
         return allUsers.get(nickname).toString();
     }
 
-    protected Connection getConnection(String nickname) {
+    protected Network getConnection(String nickname) {
         return allUsers.get(nickname);
     }
 
-    protected void addUser(String nickname, Connection connection) {
+    protected void addUser(String nickname, Network connection) {
         allUsers.put(nickname, connection);
     }
 

@@ -4,6 +4,8 @@ import client.ClientGuiView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -49,8 +51,8 @@ public class ServerGuiView extends JFrame {
 
         setTitle("Server");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(500, 300));
-        setPreferredSize(new java.awt.Dimension(500, 300));
+        setMinimumSize(new java.awt.Dimension(800, 300));
+        setPreferredSize(new java.awt.Dimension(800, 300));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -58,6 +60,7 @@ public class ServerGuiView extends JFrame {
                 System.exit(0);
             }
         });
+        setLocationRelativeTo(null);
 
         try {
             setIconImage(ImageIO.read(new File("default.png")));
@@ -67,11 +70,24 @@ public class ServerGuiView extends JFrame {
 
         buttonStartServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/start-server.png"))));
         buttonStartServer.setText("Start server");
-        buttonStartServer.addActionListener(e -> server.startServer(getPortFromOptionPane()));
+        buttonStartServer.addActionListener(e -> {
+            server.startServer(getPortFromOptionPane());
+            if (server.isServerStart()) {
+                buttonStartServer.setEnabled(false);
+                buttonStopServer.setEnabled(true);
+            }
+        });
 
         buttonStopServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/stop-server.png"))));
         buttonStopServer.setText("Stop server");
-        buttonStopServer.addActionListener(e -> server.stopServer());
+        buttonStopServer.setEnabled(false);
+        buttonStopServer.addActionListener(e -> {
+            server.stopServer();
+            if (!server.isServerStart()) {
+                buttonStartServer.setEnabled(true);
+                buttonStopServer.setEnabled(false);
+            }
+        });
 
         buttonSaveLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/save-log.png"))));
         buttonSaveLog.setText("Save log");
@@ -81,7 +97,6 @@ public class ServerGuiView extends JFrame {
         textAreaLog.setColumns(20);
         textAreaLog.setRows(5);
         scrollPanel.setViewportView(textAreaLog);
-
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
