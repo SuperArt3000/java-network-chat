@@ -4,8 +4,6 @@ import client.ClientGuiView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -51,8 +49,8 @@ public class ServerGuiView extends JFrame {
 
         setTitle("Server");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 300));
-        setPreferredSize(new java.awt.Dimension(800, 300));
+        setMinimumSize(new java.awt.Dimension(740, 400));
+        setPreferredSize(new java.awt.Dimension(740, 400));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

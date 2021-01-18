@@ -90,8 +90,8 @@ public class ClientGuiView extends JFrame {
 
         setTitle("Chat");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(840, 400));
-        setPreferredSize(new java.awt.Dimension(840, 400));
+        setMinimumSize(new java.awt.Dimension(740, 400));
+        setPreferredSize(new java.awt.Dimension(740, 400));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -118,11 +118,15 @@ public class ClientGuiView extends JFrame {
 
         buttonGroup.add(radioButtonSendMessageToAll);
         radioButtonSendMessageToAll.setSelected(true);
-        radioButtonSendMessageToAll.setText("Send message to all");
+        radioButtonSendMessageToAll.setEnabled(false);
+        radioButtonSendMessageToAll.setText("Send message");
+        radioButtonSendMessageToAll.setToolTipText("Send message to all");
         radioButtonSendMessageToAll.addActionListener(e -> radioButtonCheckPrivateOrNot = false);
 
         buttonGroup.add(radioButtonSendPrivateMessageToSelectedUser);
-        radioButtonSendPrivateMessageToSelectedUser.setText("Send private message to selected user");
+        radioButtonSendPrivateMessageToSelectedUser.setText("Send private message");
+        radioButtonSendPrivateMessageToSelectedUser.setToolTipText("Send private message to selected user");
+        radioButtonSendPrivateMessageToSelectedUser.setEnabled(false);
         radioButtonSendPrivateMessageToSelectedUser.addActionListener(e -> radioButtonCheckPrivateOrNot = true);
 
         buttonChangeName.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/change-name.png")))); // NOI18N
@@ -175,6 +179,7 @@ public class ClientGuiView extends JFrame {
         buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/send-message.png")))); // NOI18N
         buttonSend.setText("Send");
         buttonSend.setToolTipText("Send message");
+        buttonSend.setEnabled(false);
         buttonSend.addActionListener(e -> {
             if (!textFieldUserInputMessage.getText().equals("")) {
                 if (radioButtonCheckPrivateOrNot) {
@@ -191,6 +196,7 @@ public class ClientGuiView extends JFrame {
         });
 
         textFieldUserInputMessage.setToolTipText("Input message");
+        textFieldUserInputMessage.setEnabled(false);
         textFieldUserInputMessage.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -260,6 +266,9 @@ public class ClientGuiView extends JFrame {
                 client.setDatabaseConnected(false);
                 buttonSignOut.setEnabled(false);
                 buttonSignIn.setEnabled(true);
+                radioButtonSendMessageToAll.setEnabled(false);
+                radioButtonSendPrivateMessageToSelectedUser.setEnabled(false);
+                buttonSend.setEnabled(false);
                 buttonConnectionToServer.setEnabled(false);
                 buttonDisconnectToServer.setEnabled(false);
                 buttonRegistration.setEnabled(true);
@@ -281,6 +290,10 @@ public class ClientGuiView extends JFrame {
                     buttonDisconnectToServer.setEnabled(true);
                     buttonConnectionToServer.setEnabled(false);
                     buttonChangeName.setEnabled(true);
+                    textFieldUserInputMessage.setEnabled(true);
+                    radioButtonSendMessageToAll.setEnabled(true);
+                    radioButtonSendPrivateMessageToSelectedUser.setEnabled(true);
+                    buttonSend.setEnabled(true);
                 }
             }
         });
@@ -296,6 +309,10 @@ public class ClientGuiView extends JFrame {
                     buttonConnectionToServer.setEnabled(true);
                     buttonDisconnectToServer.setEnabled(false);
                     buttonChangeName.setEnabled(false);
+                    textFieldUserInputMessage.setEnabled(false);
+                    radioButtonSendMessageToAll.setEnabled(false);
+                    radioButtonSendPrivateMessageToSelectedUser.setEnabled(false);
+                    buttonSend.setEnabled(false);
                 }
             }
         });
