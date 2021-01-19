@@ -7,6 +7,7 @@ import java.util.Set;
  * @author Zurbaevi Nika
  */
 public class ClientGuiModel {
+
     private Set<String> allUserNicknames = new HashSet<>();
 
     protected Set<String> getAllNickname() {

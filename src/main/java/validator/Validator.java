@@ -20,8 +20,4 @@ public class Validator {
     public static boolean isValidPassword(final String password) {
         return passwordPattern.matcher(password).matches();
     }
-
-    public static boolean isValidChangeNickname(final String nickname) {
-        return nicknamePattern.matcher(nickname).matches();
-    }
 }

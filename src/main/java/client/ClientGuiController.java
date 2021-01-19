@@ -4,6 +4,7 @@ import connection.Message;
 import connection.MessageType;
 import connection.Network;
 import database.SQLService;
+import settings.Settings;
 import sound.MakeSound;
 import validator.Validator;
 
@@ -15,6 +16,7 @@ import java.sql.SQLException;
  * @author Zurbaevi Nika
  */
 public class ClientGuiController {
+
     private Network connection;
     private ClientGuiModel model;
     private ClientGuiView view;
@@ -106,14 +108,14 @@ public class ClientGuiController {
 
     protected void informAboutAddingNewUser(Message message) {
         model.addUser(message.getTextMessage());
-        MakeSound.playSound("connected.wav");
+        MakeSound.playSound(Settings.SOUND_URL_CONNECTED);
         view.refreshListUsers(model.getAllNickname());
         view.addMessage(String.format("(%s) has joined the chat.\n", message.getTextMessage()));
     }
 
     protected void informAboutDeletingNewUser(Message message) {
         model.deleteUser(message.getTextMessage());
-        MakeSound.playSound("disconnected.wav");
+        MakeSound.playSound(Settings.SOUND_URL_DISCONNECT);
         view.refreshListUsers(model.getAllNickname());
         view.addMessage(String.format("(%s) has left the chat.\n", message.getTextMessage()));
     }
@@ -201,7 +203,7 @@ public class ClientGuiController {
     public void changeNickname() {
         String newNickname = view.getNickname();
         try {
-            if (Validator.isValidChangeNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
+            if (Validator.isValidNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
                 model.deleteUser(nickname);
                 nickname = newNickname;
                 model.addUser(newNickname);

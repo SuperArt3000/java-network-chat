@@ -9,6 +9,7 @@ import java.util.Map;
  * @author Zurbaevi Nika
  */
 public class ServerGuiModel {
+
     private Map<String, Network> allUsers = new HashMap<>();
 
     protected Map<String, Network> getAllUsersChat() {

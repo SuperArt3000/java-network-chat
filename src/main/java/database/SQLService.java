@@ -6,6 +6,7 @@ import java.sql.*;
  * @author Zurbaevi Nika
  */
 public class SQLService {
+
     private static final String URL_CONNECTION_DATABASE = "jdbc:sqlite:usersDatabase.db";
     private static final String DRIVER = "org.sqlite.JDBC";
     private static SQLService instance;
@@ -54,10 +55,10 @@ public class SQLService {
     }
 
     private static void prepareAllStatements() throws SQLException {
-        preparedStatementGetNicknameByLoginAndPassword = connection.prepareStatement("SELECT Username FROM users WHERE Username = ? AND Password = ?;");
-        preparedStatementGetNickname = connection.prepareStatement("SELECT Username FROM users WHERE Username = ?");
-        preparedStatementRegistration = connection.prepareStatement("INSERT INTO users (Username, Password) VALUES (?, ?);");
-        preparedStatementChangeNick = connection.prepareStatement("UPDATE users SET Username = ? WHERE Username = ?;");
+        preparedStatementGetNicknameByLoginAndPassword = connection.prepareStatement("SELECT Nickname FROM users WHERE Nickname = ? AND Password = ?;");
+        preparedStatementGetNickname = connection.prepareStatement("SELECT Nickname FROM users WHERE Nickname = ?");
+        preparedStatementRegistration = connection.prepareStatement("INSERT INTO users (Nickname, Password) VALUES (?, ?);");
+        preparedStatementChangeNick = connection.prepareStatement("UPDATE users SET Nickname = ? WHERE Nickname = ?;");
     }
 
     public static String getNickname(String nickname) throws SQLException {

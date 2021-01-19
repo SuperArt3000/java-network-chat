@@ -3,6 +3,7 @@ package client;
 import authorization.Login;
 import authorization.Registration;
 import database.SQLService;
+import settings.Settings;
 import sound.MakeSound;
 
 import javax.imageio.ImageIO;
@@ -88,10 +89,10 @@ public class ClientGuiView extends JFrame {
         buttonSignOut = new JButton();
         buttonDisconnectToServer = new JButton();
 
-        setTitle("Chat");
+        setTitle(Settings.CLIENT_TITLE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(740, 400));
-        setPreferredSize(new java.awt.Dimension(740, 400));
+        setMinimumSize(new java.awt.Dimension(Settings.CLIENT_SIZE_WIDTH, Settings.CLIENT_SIZE_HEIGHT));
+        setPreferredSize(new java.awt.Dimension(Settings.CLIENT_SIZE_WIDTH, Settings.CLIENT_SIZE_HEIGHT));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -111,7 +112,7 @@ public class ClientGuiView extends JFrame {
         setLocationRelativeTo(null);
 
         try {
-            setIconImage(ImageIO.read(new File("default.png")));
+            setIconImage(ImageIO.read(new File(Settings.CLIENT_ICON_IMAGE)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,18 +130,15 @@ public class ClientGuiView extends JFrame {
         radioButtonSendPrivateMessageToSelectedUser.setEnabled(false);
         radioButtonSendPrivateMessageToSelectedUser.addActionListener(e -> radioButtonCheckPrivateOrNot = true);
 
-        buttonChangeName.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/change-name.png")))); // NOI18N
+        buttonChangeName.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_CHANGE_NAME))));
         buttonChangeName.setToolTipText("Change name");
         buttonChangeName.setEnabled(false);
         buttonChangeName.addActionListener(e -> {
             client.changeNickname();
         });
 
-        buttonChangeInputColor.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/color-wheel.png")))); // NOI18N
+        buttonChangeInputColor.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_COLOR_WHEEL))));
         buttonChangeInputColor.setToolTipText("Change input color");
-        buttonChangeInputColor.setMaximumSize(new java.awt.Dimension(50, 25));
-        buttonChangeInputColor.setMinimumSize(new java.awt.Dimension(50, 25));
-        buttonChangeInputColor.setPreferredSize(new java.awt.Dimension(50, 25));
         buttonChangeInputColor.addActionListener(e -> {
             Color color = JColorChooser.showDialog(null, "Choose a Color", textAreaChatLog.getForeground());
             if (color != null) {
@@ -148,35 +146,32 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/volume-on.png")))); // NOI18N
+        buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_VOLUME_ON))));
         buttonSoundOptions.setToolTipText("Sound options");
-        buttonSoundOptions.setMaximumSize(new java.awt.Dimension(50, 25));
-        buttonSoundOptions.setMinimumSize(new java.awt.Dimension(50, 25));
-        buttonSoundOptions.setPreferredSize(new java.awt.Dimension(50, 25));
         buttonSoundOptions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!MakeSound.isIncluded()) {
                     MakeSound.off();
-                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/volume-off.png")))); // NOI18N
+                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_VOLUME_OFF))));
                 } else {
                     MakeSound.on();
-                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/volume-on.png")))); //
+                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_VOLUME_ON))));
                 }
             }
         });
 
-        buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/save-log.png")))); // NOI18N
+        buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SAVE_LOG))));
         buttonChatLog.setToolTipText("Chat log");
         buttonChatLog.addActionListener(e -> saveToFile());
 
-        buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/move-tray.png")))); // NOI18N
+        buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_MOVE_TRAY))));
         buttonMoveToSystemTray.setToolTipText("Move to system tray");
         buttonMoveToSystemTray.addActionListener(e -> {
             moveToSystemTray();
         });
 
-        buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/send-message.png")))); // NOI18N
+        buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SEND_MESSAGE))));
         buttonSend.setText("Send");
         buttonSend.setToolTipText("Send message");
         buttonSend.setEnabled(false);
@@ -220,14 +215,13 @@ public class ClientGuiView extends JFrame {
         scrollPanelForUserListOnline.setViewportView(listUserOnline);
 
         textAreaChatLog.setEditable(false);
-        textAreaChatLog.setColumns(20);
-        textAreaChatLog.setRows(5);
+        textAreaChatLog.setColumns(Settings.TEXT_AREA_CHAT_LOG_COLUMNS);
+        textAreaChatLog.setRows(Settings.TEXT_AREA_CHAT_LOG_ROWS);
         textAreaChatLog.setToolTipText("Chat log");
-        textAreaChatLog.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        textAreaChatLog.setFont(new Font(Settings.TEXT_AREA_CHAT_LOG_FONT_NAME, Font.PLAIN, Settings.TEXT_AREA_CHAT_LOG_FONT_SIZE));
         scrollPanelForChatLog.setViewportView(textAreaChatLog);
 
-        buttonRegistration.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/registration.png")))); // NOI18N
-        buttonRegistration.setText("");
+        buttonRegistration.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_REGISTRATION))));
         buttonRegistration.setToolTipText("Database registration");
         buttonRegistration.addActionListener(e -> {
             if (!client.isDatabaseConnected()) {
@@ -239,8 +233,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSignIn.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/sign-in.png")))); // NOI18N
-        buttonSignIn.setText("");
+        buttonSignIn.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SIGN_IN))));
         buttonSignIn.setToolTipText("Database sign in");
         buttonSignIn.addActionListener(e -> {
             if (!client.isDatabaseConnected()) {
@@ -257,8 +250,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSignOut.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/sign-out.png")))); // NOI18N
-        buttonSignOut.setText("");
+        buttonSignOut.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SIGN_OUT))));
         buttonSignOut.setToolTipText("Database sign out");
         buttonSignOut.setEnabled(false);
         buttonSignOut.addActionListener(e -> {
@@ -279,7 +271,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonConnectionToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/connection.png")))); // NOI18N
+        buttonConnectionToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_CONNECTION))));
         buttonConnectionToServer.setText("Connect");
         buttonConnectionToServer.setToolTipText("Connect to server");
         buttonConnectionToServer.setEnabled(false);
@@ -298,7 +290,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonDisconnectToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("images/disconnected.png")))); // NOI18N
+        buttonDisconnectToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_DISCONNECT))));
         buttonDisconnectToServer.setText("Disconnect");
         buttonDisconnectToServer.setToolTipText("Disconnect to server");
         buttonDisconnectToServer.setEnabled(false);
@@ -393,7 +385,7 @@ public class ClientGuiView extends JFrame {
 
     protected void addMessage(String text) {
         textAreaChatLog.append("[" + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "] " + text);
-        MakeSound.playSound("new-message.wav");
+        MakeSound.playSound(Settings.SOUND_URL_NEW_MESSAGE);
     }
 
     protected void refreshListUsers(Set<String> allUserNicknames) {
@@ -459,8 +451,8 @@ public class ClientGuiView extends JFrame {
 
     private void moveToSystemTray() {
         try {
-            BufferedImage Icon = ImageIO.read(new File("default.png"));
-            final TrayIcon trayIcon = new TrayIcon(Icon, "Network chat");
+            BufferedImage Icon = ImageIO.read(new File(Settings.CLIENT_ICON_IMAGE));
+            final TrayIcon trayIcon = new TrayIcon(Icon, Settings.CLIENT_TITLE);
             setVisible(false);
             SystemTray systemTray = SystemTray.getSystemTray();
             systemTray.add(trayIcon);

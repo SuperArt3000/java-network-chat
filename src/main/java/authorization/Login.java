@@ -1,6 +1,7 @@
 package authorization;
 
 import database.SQLService;
+import settings.Settings;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
  * @author Zurbaevi Nika
  */
 public class Login extends JDialog {
+
     private JTextField textFieldNickname;
     private JPasswordField passwordField;
     private JLabel labelNickname;
@@ -20,7 +22,7 @@ public class Login extends JDialog {
     private boolean succeeded;
 
     public Login(Frame parent) {
-        super(parent, "Login", true);
+        super(parent, Settings.LOGIN_TITLE, true);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
 

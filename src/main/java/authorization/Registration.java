@@ -1,6 +1,7 @@
 package authorization;
 
 import database.SQLService;
+import settings.Settings;
 import validator.Validator;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
  * @author Zurbaevi Nika
  */
 public class Registration extends JDialog {
+
     private JTextField textFieldNickname;
     private JPasswordField passwordField;
     private JLabel labelNickname;
@@ -21,7 +23,7 @@ public class Registration extends JDialog {
     private boolean succeeded;
 
     public Registration(Frame parent) {
-        super(parent, "Registration", true);
+        super(parent, Settings.REGISTRATION_TITLE, true);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
 
