@@ -1,4 +1,4 @@
-# Network chat
+# Network chat - The project is still being finalized
 *This is a network course project.*
 
 ### Technicals
