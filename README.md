@@ -31,7 +31,7 @@
 - You can turn off notifications.
 - You can save a log message.
 - You can change your name in chat and all users will see that you have changed your name.
-
+- Now all user messages will be recorded in the database, including personal ones.
 ---
 
 ## Chat
