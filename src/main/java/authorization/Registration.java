@@ -14,12 +14,12 @@ import java.sql.SQLException;
  */
 public class Registration extends JDialog {
 
-    private JTextField textFieldNickname;
-    private JPasswordField passwordField;
-    private JLabel labelNickname;
-    private JLabel labelPassword;
-    private JButton buttonRegistration;
-    private JButton buttonCancel;
+    private final JTextField textFieldNickname;
+    private final JPasswordField passwordField;
+    private final JLabel labelNickname;
+    private final JLabel labelPassword;
+    private final JButton buttonRegistration;
+    private final JButton buttonCancel;
     private boolean succeeded;
 
     public Registration(Frame parent) {

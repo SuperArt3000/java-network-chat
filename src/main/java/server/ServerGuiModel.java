@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ServerGuiModel {
 
-    private Map<String, Network> allUsers = new HashMap<>();
+    private final Map<String, Network> allUsers = new HashMap<>();
 
     protected Map<String, Network> getAllUsersChat() {
         return allUsers;

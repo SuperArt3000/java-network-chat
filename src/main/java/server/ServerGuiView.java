@@ -161,9 +161,7 @@ public class ServerGuiView extends JFrame {
             try {
                 return Integer.parseInt(port.trim());
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(
-                        this, "Incorrect server port entered. Try again.", "Server port input error", JOptionPane.ERROR_MESSAGE
-                );
+                JOptionPane.showMessageDialog(this, "Incorrect server port entered. Try again.", "Server port input error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

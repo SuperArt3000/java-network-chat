@@ -4,14 +4,14 @@ package connection;
  * @author Zurbaevi Nika
  */
 public enum MessageType {
-    REQUEST_NAME_USER,
+    REQUEST_NICKNAME,
     TEXT_MESSAGE,
-    NAME_ACCEPTED,
-    USER_NAME,
-    NAME_USED,
+    NICKNAME_ACCEPTED,
+    NICKNAME,
+    NICKNAME_USED,
     USER_ADDED,
     DISABLE_USER,
     REMOVED_USER,
     PRIVATE_TEXT_MESSAGE,
-    USERNAME_CHANGED,
+    NICKNAME_CHANGED,
 }

@@ -103,7 +103,7 @@ public class ServerGuiController {
 
     private class ServerThread extends Thread {
 
-        private Socket socket;
+        private final Socket socket;
 
         public ServerThread(Socket socket) {
             this.socket = socket;
@@ -112,20 +112,20 @@ public class ServerGuiController {
         private String requestAndAddingUser(Network connection) {
             while (true) {
                 try {
-                    connection.send(new Message(MessageType.REQUEST_NAME_USER));
+                    connection.send(new Message(MessageType.REQUEST_NICKNAME));
                     Message responseMessage = connection.receive();
                     String nickname = responseMessage.getTextMessage();
-                    if (responseMessage.getTypeMessage() == MessageType.USER_NAME && nickname != null && !nickname.isEmpty() && !model.getAllUsersChat().containsKey(nickname)) {
+                    if (responseMessage.getTypeMessage() == MessageType.NICKNAME && nickname != null && !nickname.isEmpty() && !model.getAllUsersChat().containsKey(nickname)) {
                         model.addUser(nickname, connection);
                         Set<String> listUsers = new HashSet<>();
                         for (Map.Entry<String, Network> users : model.getAllUsersChat().entrySet()) {
                             listUsers.add(users.getKey());
                         }
-                        connection.send(new Message(MessageType.NAME_ACCEPTED, listUsers));
+                        connection.send(new Message(MessageType.NICKNAME_ACCEPTED, listUsers));
                         sendMessageAllUsers(new Message(MessageType.USER_ADDED, nickname));
                         return nickname;
                     } else {
-                        connection.send(new Message(MessageType.NAME_USED));
+                        connection.send(new Message(MessageType.NICKNAME_USED));
                     }
                 } catch (Exception e) {
                     gui.refreshDialogWindowServer("There was an error requesting and adding a new user\n");
@@ -140,20 +140,20 @@ public class ServerGuiController {
                     Message message = network.receive();
                     if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
                         sendMessage(nickname, message);
-                        SQLService.saveInformation(String.format("%s: %s\n", nickname, message.getTextMessage()));
+                        SQLService.savingUserMessages(String.format("%s: %s\n", nickname, message.getTextMessage()));
                     }
                     if (message.getTypeMessage() == MessageType.PRIVATE_TEXT_MESSAGE) {
                         sendPrivateMessage(new Message(MessageType.PRIVATE_TEXT_MESSAGE, message.getTextMessage() + " " + nickname));
-                        SQLService.saveInformation("*" + message.getTextMessage() + " - (" + nickname + ")");
+                        SQLService.savingUserMessages("*" + message.getTextMessage() + " - (" + nickname + ")");
                     }
-                    if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
+                    if (message.getTypeMessage() == MessageType.NICKNAME_CHANGED) {
                         String textMessage = String.format("%s changed nickname to %s", nickname, message.getTextMessage());
                         nicknameChanged(nickname, message);
-                        SQLService.saveInformation(textMessage);
+                        SQLService.savingUserMessages(textMessage);
                     }
                     if (message.getTypeMessage() == MessageType.DISABLE_USER) {
-                        disableUser(nickname, message, network);
-                        SQLService.saveInformation((nickname + ": disconnected"));
+                        disableUser(nickname, network);
+                        SQLService.savingUserMessages((nickname + ": disconnected"));
                         break;
                     }
                 } catch (Exception e) {
@@ -170,7 +170,7 @@ public class ServerGuiController {
         }
 
         private void nicknameChanged(String nickname, Message message) {
-            sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", nickname, message.getTextMessage())));
+            sendMessageAllUsers(new Message(MessageType.NICKNAME_CHANGED, String.format("%s changed nickname to %s", nickname, message.getTextMessage())));
             String tempName = nickname;
             Network tempConnection = model.getConnection(nickname);
             model.removeUser(tempName);
@@ -178,7 +178,7 @@ public class ServerGuiController {
             model.addUser(nickname, tempConnection);
         }
 
-        private void disableUser(String nickname, Message message, Network network) throws IOException {
+        private void disableUser(String nickname, Network network) throws IOException {
             sendMessageAllUsers(new Message(MessageType.REMOVED_USER, nickname));
             model.removeUser(nickname);
             network.close();

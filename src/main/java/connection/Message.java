@@ -8,9 +8,9 @@ import java.util.Set;
  */
 public class Message implements Serializable {
 
-    private MessageType typeMessage;
-    private String textMessage;
-    private Set<String> listUsers;
+    private final MessageType typeMessage;
+    private final String textMessage;
+    private final Set<String> listUsers;
 
     public Message(MessageType typeMessage, String textMessage) {
         this.textMessage = textMessage;

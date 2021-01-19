@@ -13,12 +13,12 @@ import java.sql.SQLException;
  */
 public class Login extends JDialog {
 
-    private JTextField textFieldNickname;
-    private JPasswordField passwordField;
-    private JLabel labelNickname;
-    private JLabel labelPassword;
-    private JButton buttonLogin;
-    private JButton buttonCancel;
+    private final JTextField textFieldNickname;
+    private final JPasswordField passwordField;
+    private final JLabel labelNickname;
+    private final JLabel labelPassword;
+    private final JButton buttonLogin;
+    private final JButton buttonCancel;
     private boolean succeeded;
 
     public Login(Frame parent) {

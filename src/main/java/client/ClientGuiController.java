@@ -42,16 +42,16 @@ public class ClientGuiController {
         while (true) {
             try {
                 Message message = connection.receive();
-                if (message.getTypeMessage() == MessageType.REQUEST_NAME_USER) {
+                if (message.getTypeMessage() == MessageType.REQUEST_NICKNAME) {
                     nickname = SQLService.getNickname(nickname);
-                    connection.send(new Message(MessageType.USER_NAME, nickname));
+                    connection.send(new Message(MessageType.NICKNAME, nickname));
                 }
-                if (message.getTypeMessage() == MessageType.NAME_USED) {
+                if (message.getTypeMessage() == MessageType.NICKNAME_USED) {
                     view.errorDialogWindow("A user with this name is already in the chat");
                     disableClient();
                     break;
                 }
-                if (message.getTypeMessage() == MessageType.NAME_ACCEPTED) {
+                if (message.getTypeMessage() == MessageType.NICKNAME_ACCEPTED) {
                     view.addMessage(String.format("Your name is accepted (%s)\n", nickname));
                     model.setUsers(message.getListUsers());
                     break;
@@ -77,7 +77,7 @@ public class ClientGuiController {
                 if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
                     processIncomingMessage(message);
                 }
-                if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
+                if (message.getTypeMessage() == MessageType.NICKNAME_CHANGED) {
                     notifyNicknameChanged(message);
                 }
                 if (message.getTypeMessage() == MessageType.PRIVATE_TEXT_MESSAGE) {
@@ -209,7 +209,7 @@ public class ClientGuiController {
                 model.addUser(newNickname);
                 view.refreshListUsers(model.getAllNickname());
                 try {
-                    connection.send(new Message(MessageType.USERNAME_CHANGED, newNickname));
+                    connection.send(new Message(MessageType.NICKNAME_CHANGED, newNickname));
                 } catch (IOException e) {
                     view.errorDialogWindow(e.getMessage());
                 }

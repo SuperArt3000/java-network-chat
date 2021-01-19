@@ -102,7 +102,7 @@ public class SQLService {
         return true;
     }
 
-    public static void saveInformation(String message) throws SQLException {
+    public static void savingUserMessages(String message) throws SQLException {
         preparedStatementSaveInformation.setString(1, message);
         preparedStatementSaveInformation.setString(2, LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         preparedStatementSaveInformation.executeUpdate();
