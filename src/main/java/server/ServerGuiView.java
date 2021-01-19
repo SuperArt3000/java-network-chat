@@ -1,6 +1,7 @@
 package server;
 
 import client.ClientGuiView;
+import database.SQLService;
 import settings.Settings;
 
 import javax.imageio.ImageIO;
@@ -29,6 +30,8 @@ public class ServerGuiView extends JFrame {
 
     public ServerGuiView(ServerGuiController server) {
         this.server = server;
+
+        SQLService.getInstance();
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

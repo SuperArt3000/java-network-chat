@@ -4,7 +4,9 @@ package server;
 import connection.Message;
 import connection.MessageType;
 import connection.Network;
+import database.SQLService;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
@@ -137,25 +139,21 @@ public class ServerGuiController {
                 try {
                     Message message = network.receive();
                     if (message.getTypeMessage() == MessageType.TEXT_MESSAGE) {
-                        String textMessage = String.format("%s: %s\n", nickname, message.getTextMessage());
-                        sendMessageAllUsers(new Message(MessageType.TEXT_MESSAGE, textMessage));
+                        sendMessage(nickname, message);
+                        SQLService.saveInformation(String.format("%s: %s\n", nickname, message.getTextMessage()));
                     }
                     if (message.getTypeMessage() == MessageType.PRIVATE_TEXT_MESSAGE) {
                         sendPrivateMessage(new Message(MessageType.PRIVATE_TEXT_MESSAGE, message.getTextMessage() + " " + nickname));
+                        SQLService.saveInformation("*" + message.getTextMessage() + " - (" + nickname + ")");
                     }
                     if (message.getTypeMessage() == MessageType.USERNAME_CHANGED) {
-                        sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", nickname, message.getTextMessage())));
-                        String tempName = nickname;
-                        Network tempConnection = model.getConnection(nickname);
-                        model.removeUser(tempName);
-                        nickname = message.getTextMessage();
-                        model.addUser(nickname, tempConnection);
+                        String textMessage = String.format("%s changed nickname to %s", nickname, message.getTextMessage());
+                        nicknameChanged(nickname, message);
+                        SQLService.saveInformation(textMessage);
                     }
                     if (message.getTypeMessage() == MessageType.DISABLE_USER) {
-                        sendMessageAllUsers(new Message(MessageType.REMOVED_USER, nickname));
-                        model.removeUser(nickname);
-                        network.close();
-                        gui.refreshDialogWindowServer(String.format("Remote access user %s disconnected.\n", socket.getRemoteSocketAddress()));
+                        disableUser(nickname, message, network);
+                        SQLService.saveInformation((nickname + ": disconnected"));
                         break;
                     }
                 } catch (Exception e) {
@@ -164,6 +162,27 @@ public class ServerGuiController {
                     break;
                 }
             }
+        }
+
+        private void sendMessage(String nickname, Message message) {
+            String textMessage = String.format("%s: %s\n", nickname, message.getTextMessage());
+            sendMessageAllUsers(new Message(MessageType.TEXT_MESSAGE, textMessage));
+        }
+
+        private void nicknameChanged(String nickname, Message message) {
+            sendMessageAllUsers(new Message(MessageType.USERNAME_CHANGED, String.format("%s changed nickname to %s", nickname, message.getTextMessage())));
+            String tempName = nickname;
+            Network tempConnection = model.getConnection(nickname);
+            model.removeUser(tempName);
+            nickname = message.getTextMessage();
+            model.addUser(nickname, tempConnection);
+        }
+
+        private void disableUser(String nickname, Message message, Network network) throws IOException {
+            sendMessageAllUsers(new Message(MessageType.REMOVED_USER, nickname));
+            model.removeUser(nickname);
+            network.close();
+            gui.refreshDialogWindowServer(String.format("Remote access user %s disconnected.\n", socket.getRemoteSocketAddress()));
         }
 
         @Override
