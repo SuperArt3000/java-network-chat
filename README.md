@@ -2,7 +2,7 @@
 *This is a network course project.*
 
 ### Technicals
-- IDE:Idea
+- IDE: Idea
 - Manage Project: Maven
 - Version control: github
 
