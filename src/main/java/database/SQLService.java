@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class SQLService {
 
-    private static final String URL_CONNECTION_DATABASE = "jdbc:sqlite:usersDatabase.db";
+    private static final String URL_CONNECTION_DATABASE = "jdbc:sqlite:src/main/java/database/usersDatabase.db";
     private static final String DRIVER = "org.sqlite.JDBC";
     private static SQLService instance;
     private static Connection connection;
