@@ -14,8 +14,8 @@ public class Settings {
     public static int SERVER_SIZE_WIDTH = 740;
     public static int SERVER_SIZE_HEIGHT = 400;
 
-    public static String CLIENT_ICON_IMAGE = "default.png";
-    public static String SERVER_ICON_IMAGE = "default.png";
+    public static String CLIENT_ICON_IMAGE = "src/resource/images/default.png";
+    public static String SERVER_ICON_IMAGE = "src/resource/images/default.png";
 
     public static int TEXT_AREA_CHAT_LOG_COLUMNS = 20;
     public static int TEXT_AREA_CHAT_LOG_ROWS = 5;
