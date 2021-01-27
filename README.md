@@ -33,7 +33,7 @@
 - You can save a log message.
 - You can change your name in chat and all users will see that you have changed your name.
 ___
-- The graphical part is implemented using
+- The graphical part is implemented using Swing
 - Account data and chat history are stored on the server side using SQLite. Working with the database is based on JDBC.
 - The project uses dependencies on the Maven repository.
 ---
