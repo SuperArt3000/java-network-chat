@@ -1,12 +1,12 @@
-package client;
+package ru.geekbrains.client;
 
-import connection.Message;
-import connection.MessageType;
-import connection.Network;
-import database.SQLService;
-import settings.Settings;
-import sound.MakeSound;
-import validator.Validator;
+import ru.geekbrains.connection.Message;
+import ru.geekbrains.connection.MessageType;
+import ru.geekbrains.connection.Network;
+import ru.geekbrains.database.SQLService;
+import ru.geekbrains.settings.Settings;
+import ru.geekbrains.sound.MakeSound;
+import ru.geekbrains.validator.Validator;
 
 import java.io.IOException;
 import java.net.Socket;

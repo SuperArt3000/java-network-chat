@@ -1,10 +1,10 @@
-package server;
+package ru.geekbrains.server;
 
 
-import connection.Message;
-import connection.MessageType;
-import connection.Network;
-import database.SQLService;
+import ru.geekbrains.connection.Message;
+import ru.geekbrains.connection.MessageType;
+import ru.geekbrains.connection.Network;
+import ru.geekbrains.database.SQLService;
 
 import java.io.IOException;
 import java.net.ServerSocket;

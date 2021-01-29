@@ -1,4 +1,4 @@
-package sound;
+package ru.geekbrains.sound;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

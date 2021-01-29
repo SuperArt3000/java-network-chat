@@ -1,6 +1,6 @@
-package app;
+package ru.geekbrains.app;
 
-import server.ServerGuiController;
+import ru.geekbrains.server.ServerGuiController;
 
 /**
  * @author Zurbaevi Nika

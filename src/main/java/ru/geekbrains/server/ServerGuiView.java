@@ -1,8 +1,8 @@
-package server;
+package ru.geekbrains.server;
 
-import client.ClientGuiView;
-import database.SQLService;
-import settings.Settings;
+import ru.geekbrains.client.ClientGuiView;
+import ru.geekbrains.database.SQLService;
+import ru.geekbrains.settings.Settings;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 /**
  * @author Zurbaevi Nika
@@ -71,7 +70,7 @@ public class ServerGuiView extends JFrame {
             e.printStackTrace();
         }
 
-        buttonStartServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_START_SERVER))));
+        buttonStartServer.setIcon(new ImageIcon(Settings.IMAGE_ICON_START_SERVER));
         buttonStartServer.setText("Start server");
         buttonStartServer.addActionListener(e -> {
             server.startServer(getPortFromOptionPane());
@@ -81,7 +80,7 @@ public class ServerGuiView extends JFrame {
             }
         });
 
-        buttonStopServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_STOP_SERVER))));
+        buttonStopServer.setIcon(new ImageIcon(Settings.IMAGE_ICON_STOP_SERVER));
         buttonStopServer.setText("Stop server");
         buttonStopServer.setEnabled(false);
         buttonStopServer.addActionListener(e -> {
@@ -92,7 +91,7 @@ public class ServerGuiView extends JFrame {
             }
         });
 
-        buttonSaveLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SAVE_LOG))));
+        buttonSaveLog.setIcon(new ImageIcon(Settings.IMAGE_ICON_SAVE_LOG));
         buttonSaveLog.setText("Save log");
         buttonSaveLog.addActionListener(e -> saveToFile());
 

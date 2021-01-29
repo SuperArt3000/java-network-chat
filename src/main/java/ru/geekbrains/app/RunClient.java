@@ -1,6 +1,6 @@
-package app;
+package ru.geekbrains.app;
 
-import client.ClientGuiController;
+import ru.geekbrains.client.ClientGuiController;
 
 /**
  * @author Zurbaevi Nika

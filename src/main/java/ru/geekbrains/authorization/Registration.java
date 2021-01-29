@@ -1,7 +1,8 @@
-package authorization;
+package ru.geekbrains.authorization;
 
-import database.SQLService;
-import settings.Settings;
+import ru.geekbrains.database.SQLService;
+import ru.geekbrains.settings.Settings;
+import ru.geekbrains.validator.Validator;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -11,18 +12,18 @@ import java.sql.SQLException;
 /**
  * @author Zurbaevi Nika
  */
-public class Login extends JDialog {
+public class Registration extends JDialog {
 
     private final JTextField textFieldNickname;
     private final JPasswordField passwordField;
     private final JLabel labelNickname;
     private final JLabel labelPassword;
-    private final JButton buttonLogin;
+    private final JButton buttonRegistration;
     private final JButton buttonCancel;
     private boolean succeeded;
 
-    public Login(Frame parent) {
-        super(parent, Settings.LOGIN_TITLE, true);
+    public Registration(Frame parent) {
+        super(parent, Settings.REGISTRATION_TITLE, true);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
 
@@ -53,28 +54,28 @@ public class Login extends JDialog {
         panel.add(passwordField, gridBagConstraints);
         panel.setBorder(new LineBorder(Color.GRAY));
 
-        buttonLogin = new JButton("Login");
+        buttonRegistration = new JButton("Registration");
 
-        buttonLogin.addActionListener(e -> {
+        buttonRegistration.addActionListener(e -> {
             try {
-                if (authenticate(getNickname(), getPassword())) {
-                    JOptionPane.showMessageDialog(Login.this, "You have successfully logged in.", "Login", JOptionPane.INFORMATION_MESSAGE);
+                if (checkUserInputPasswordAndNickname(getNickname(), getPassword()) && authenticate(getNickname(), getPassword())) {
+                    JOptionPane.showMessageDialog(Registration.this, "You have successfully registration.", "Registration", JOptionPane.INFORMATION_MESSAGE);
                     succeeded = true;
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(Registration.this, "Invalid username or password", "Registration", JOptionPane.ERROR_MESSAGE);
                     textFieldNickname.setText("");
                     passwordField.setText("");
                     succeeded = false;
                 }
             } catch (SQLException sqlException) {
-                JOptionPane.showMessageDialog(Login.this, sqlException.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(Registration.this, sqlException.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         buttonCancel = new JButton("Cancel");
         buttonCancel.addActionListener(e -> dispose());
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(buttonLogin);
+        buttonPanel.add(buttonRegistration);
         buttonPanel.add(buttonCancel);
 
         getContentPane().add(panel, BorderLayout.CENTER);
@@ -86,7 +87,7 @@ public class Login extends JDialog {
     }
 
     public boolean authenticate(String getNickname, String password) throws SQLException {
-        return SQLService.getNicknameByLoginAndPassword(getNickname, password) != null;
+        return SQLService.registration(getNickname, password);
     }
 
     public String getNickname() {
@@ -99,5 +100,9 @@ public class Login extends JDialog {
 
     public boolean isSucceeded() {
         return succeeded;
+    }
+
+    private boolean checkUserInputPasswordAndNickname(String nickname, String password) {
+        return Validator.isValidNickname(nickname) && Validator.isValidPassword(password);
     }
 }

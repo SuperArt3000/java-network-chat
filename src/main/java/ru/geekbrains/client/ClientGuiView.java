@@ -1,10 +1,10 @@
-package client;
+package ru.geekbrains.client;
 
-import authorization.Login;
-import authorization.Registration;
-import database.SQLService;
-import settings.Settings;
-import sound.MakeSound;
+import ru.geekbrains.authorization.Login;
+import ru.geekbrains.authorization.Registration;
+import ru.geekbrains.database.SQLService;
+import ru.geekbrains.settings.Settings;
+import ru.geekbrains.sound.MakeSound;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -130,14 +129,14 @@ public class ClientGuiView extends JFrame {
         radioButtonSendPrivateMessageToSelectedUser.setEnabled(false);
         radioButtonSendPrivateMessageToSelectedUser.addActionListener(e -> radioButtonCheckPrivateOrNot = true);
 
-        buttonChangeName.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_CHANGE_NAME))));
+        buttonChangeName.setIcon(new ImageIcon(Settings.IMAGE_ICON_CHANGE_NAME));
         buttonChangeName.setToolTipText("Change name");
         buttonChangeName.setEnabled(false);
         buttonChangeName.addActionListener(e -> {
             client.changeNickname();
         });
 
-        buttonChangeInputColor.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_COLOR_WHEEL))));
+        buttonChangeInputColor.setIcon(new ImageIcon(Settings.IMAGE_ICON_COLOR_WHEEL));
         buttonChangeInputColor.setToolTipText("Change input color");
         buttonChangeInputColor.addActionListener(e -> {
             Color color = JColorChooser.showDialog(null, "Choose a Color", textAreaChatLog.getForeground());
@@ -146,32 +145,29 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_VOLUME_ON))));
+        buttonSoundOptions.setIcon(new ImageIcon(Settings.IMAGE_ICON_VOLUME_ON));
         buttonSoundOptions.setToolTipText("Sound options");
-        buttonSoundOptions.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!MakeSound.isIncluded()) {
-                    MakeSound.off();
-                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_VOLUME_OFF))));
-                } else {
-                    MakeSound.on();
-                    buttonSoundOptions.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_VOLUME_ON))));
-                }
+        buttonSoundOptions.addActionListener(e -> {
+            if (!MakeSound.isIncluded()) {
+                MakeSound.off();
+                buttonSoundOptions.setIcon(new ImageIcon(Settings.IMAGE_ICON_VOLUME_OFF));
+            } else {
+                MakeSound.on();
+                buttonSoundOptions.setIcon(new ImageIcon(Settings.IMAGE_ICON_VOLUME_ON));
             }
         });
 
-        buttonChatLog.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SAVE_LOG))));
+        buttonChatLog.setIcon(new ImageIcon(Settings.IMAGE_ICON_SAVE_LOG));
         buttonChatLog.setToolTipText("Chat log");
         buttonChatLog.addActionListener(e -> saveToFile());
 
-        buttonMoveToSystemTray.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_MOVE_TRAY))));
+        buttonMoveToSystemTray.setIcon(new ImageIcon(Settings.IMAGE_ICON_MOVE_TRAY));
         buttonMoveToSystemTray.setToolTipText("Move to system tray");
         buttonMoveToSystemTray.addActionListener(e -> {
             moveToSystemTray();
         });
 
-        buttonSend.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SEND_MESSAGE))));
+        buttonSend.setIcon(new ImageIcon(Settings.IMAGE_ICON_SEND_MESSAGE));
         buttonSend.setText("Send");
         buttonSend.setToolTipText("Send message");
         buttonSend.setEnabled(false);
@@ -221,7 +217,7 @@ public class ClientGuiView extends JFrame {
         textAreaChatLog.setFont(new Font(Settings.TEXT_AREA_CHAT_LOG_FONT_NAME, Font.PLAIN, Settings.TEXT_AREA_CHAT_LOG_FONT_SIZE));
         scrollPanelForChatLog.setViewportView(textAreaChatLog);
 
-        buttonRegistration.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_REGISTRATION))));
+        buttonRegistration.setIcon(new ImageIcon(Settings.IMAGE_ICON_REGISTRATION));
         buttonRegistration.setToolTipText("Database registration");
         buttonRegistration.addActionListener(e -> {
             if (!client.isDatabaseConnected()) {
@@ -233,7 +229,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSignIn.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SIGN_IN))));
+        buttonSignIn.setIcon(new ImageIcon(Settings.IMAGE_ICON_SIGN_IN));
         buttonSignIn.setToolTipText("Database sign in");
         buttonSignIn.addActionListener(e -> {
             if (!client.isDatabaseConnected()) {
@@ -250,7 +246,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonSignOut.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_SIGN_OUT))));
+        buttonSignOut.setIcon(new ImageIcon(Settings.IMAGE_ICON_SIGN_OUT));
         buttonSignOut.setToolTipText("Database sign out");
         buttonSignOut.setEnabled(false);
         buttonSignOut.addActionListener(e -> {
@@ -271,7 +267,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonConnectionToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_CONNECTION))));
+        buttonConnectionToServer.setIcon(new ImageIcon(Settings.IMAGE_ICON_CONNECTION));
         buttonConnectionToServer.setText("Connect");
         buttonConnectionToServer.setToolTipText("Connect to server");
         buttonConnectionToServer.setEnabled(false);
@@ -290,7 +286,7 @@ public class ClientGuiView extends JFrame {
             }
         });
 
-        buttonDisconnectToServer.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(Settings.IMAGE_ICON_DISCONNECT))));
+        buttonDisconnectToServer.setIcon(new ImageIcon(Settings.IMAGE_ICON_DISCONNECT));
         buttonDisconnectToServer.setText("Disconnect");
         buttonDisconnectToServer.setToolTipText("Disconnect to server");
         buttonDisconnectToServer.setEnabled(false);

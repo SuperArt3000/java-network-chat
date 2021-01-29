@@ -1,6 +1,6 @@
-package server;
+package ru.geekbrains.server;
 
-import connection.Network;
+import ru.geekbrains.connection.Network;
 
 import java.util.HashMap;
 import java.util.Map;
