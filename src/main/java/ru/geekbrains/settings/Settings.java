@@ -40,9 +40,9 @@ public class Settings {
     public static String IMAGE_ICON_START_SERVER = "src/resource/images/start-server.png";
     public static String IMAGE_ICON_STOP_SERVER = "src/resource/images/stop-server.png";
 
-    public static String SOUND_URL_NEW_MESSAGE = "new-message.wav";
-    public static String SOUND_URL_DISCONNECT = "disconnected.wav";
-    public static String SOUND_URL_CONNECTED = "connected.wav";
+    public static String SOUND_URL_NEW_MESSAGE = "src/resource/sounds/new-message.wav";
+    public static String SOUND_URL_DISCONNECT = "src/resource/sounds/disconnected.wav";
+    public static String SOUND_URL_CONNECTED = "src/resource/sounds/connected.wav";
 
     public static String LOGIN_TITLE = "Login";
     public static String REGISTRATION_TITLE = "Registration";

@@ -3,6 +3,7 @@ package ru.geekbrains.sound;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -17,7 +18,7 @@ public class MakeSound {
             new Thread(() -> {
                 try {
                     Clip clip = AudioSystem.getClip();
-                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(MakeSound.class.getClassLoader().getResource("sounds/" + url)));
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(url));
                     clip.open(inputStream);
                     clip.start();
                 } catch (Exception e) {
