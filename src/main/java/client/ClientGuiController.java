@@ -187,11 +187,11 @@ public class ClientGuiController {
         }
     }
 
-    protected void sendPrivateMessageOnServer(String... data) {
+    protected void sendPrivateMessageOnServer(String userSelected, String text) {
         try {
-            if (!nickname.equals(data[0])) {
-                view.addMessage(String.format("Private message sent to user (%s)\n", data[0]));
-                connection.send(new Message(MessageType.PRIVATE_TEXT_MESSAGE, data));
+            if (!nickname.equals(userSelected)) {
+                view.addMessage(String.format("Private message sent to user (%s)\n", userSelected));
+                connection.send(new Message(MessageType.PRIVATE_TEXT_MESSAGE, text));
             } else {
                 view.errorDialogWindow("You cannot send a private message to yourself");
             }
@@ -202,22 +202,24 @@ public class ClientGuiController {
 
     public void changeNickname() {
         String newNickname = view.getNickname();
-        try {
-            if (Validator.isValidNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
-                model.deleteUser(nickname);
-                nickname = newNickname;
-                model.addUser(newNickname);
-                view.refreshListUsers(model.getAllNickname());
-                try {
-                    connection.send(new Message(MessageType.NICKNAME_CHANGED, newNickname));
-                } catch (IOException e) {
-                    view.errorDialogWindow(e.getMessage());
+        if (newNickname != null) {
+            try {
+                if (Validator.isValidNickname(newNickname) && SQLService.changeNick(nickname, newNickname)) {
+                    model.deleteUser(nickname);
+                    nickname = newNickname;
+                    model.addUser(newNickname);
+                    view.refreshListUsers(model.getAllNickname());
+                    try {
+                        connection.send(new Message(MessageType.NICKNAME_CHANGED, newNickname));
+                    } catch (IOException e) {
+                        view.errorDialogWindow(e.getMessage());
+                    }
+                } else {
+                    view.errorDialogWindow("Please enter correct data");
                 }
-            } else {
-                view.errorDialogWindow("Enter correct data");
+            } catch (SQLException e) {
+                view.errorDialogWindow("Failed to change name, it looks like a user with this name is already logged in");
             }
-        } catch (SQLException sqlException) {
-            view.errorDialogWindow(sqlException.getMessage());
         }
     }
 
