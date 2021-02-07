@@ -1,49 +1,49 @@
-# Network chat
-*This is a network course project.*
+# Сетевой чат
+*Курсовой проект.*
 
-### Technicals
+### Технические характеристики
 - IDE: Idea
-- Manage Project: Maven
-- Version control: github
+- Управление проектом: Maven
+- Управление версиями: github
 
-## Functionality
+## Функциональность
 
-#### Register
-- The user can register, but if there is a user with this name, the registration will fail.
+#### Регистрация
+- Пользователь может зарегистрироваться, но если есть пользователь с таким именем, регистрация не удастся.
 
-#### Login
-- Log in using your username and password. After logging in, you will be able to log into the server.
+#### Авторизация
+- Войдите, используя свое имя пользователя и пароль. После входа в систему вы сможете войти на сервер.
 
-#### Private Message
-- You can also send a private message to the user as well as receive a private message from the user.
+#### Личные сообщение
+- Вы также можете отправить личное сообщение пользователю, а также получить личное сообщение от пользователя.
 
-#### Show login info
-- On the server side, server can monitor all the login info.
+#### Логи
+- На стороне сервера сервер может отслеживать всю информацию для входа в систему.
 
-#### Start/Stop the server
-- On the server window, server can choose to open or close manually.
+#### Запуск/Остановка сервера
+- В окне сервера сервер можете запустить или закрыть сервер вручную.
 
-### Database
-- All user data is stored in the database.
-- Now all user messages will be recorded in the database, including personal ones.
+### База данных
+- Все пользовательские данные хранятся в базе данных.
+- Все сообщения пользователей будут записываться в базу данных, в том числе личные.
 
-### Others
-- You can change the color of the message.
-- You can turn off notifications.
-- You can save a log message.
-- You can change your name in chat and all users will see that you have changed your name.
+### Разное
+- Вы можете изменить цвет сообщения.
+- Вы можете отключить уведомления.
+- Вы можете сохранить сообщение журнала.
+- Вы можете изменить свое имя в чате, и все пользователи увидят, что вы изменили свое имя.
 ___
-- The graphical part is implemented using Swing.
-- Account data and chat history are stored on the server side using SQLite. 
-- Working with the database is based on JDBC.
-- The project uses dependencies on the Maven repository.
+- Графическая часть реализована с использованием Swing.
+- Данные учетной записи и история чата хранятся на стороне сервера с помощью SQLite.
+- Работа с базой данных основана на JDBC.
+- В проекте используются зависимости от репозитория Maven.
 ---
 
-## Chat
+## Чат
 - ![Chat](src/resource/images/Chat.jpg)
 
 ---
 
-## Server
+## Сервер
 - ![Server](src/resource/images/Server.jpg)
 
